@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: index.js</title>
+    <title>JSDoc: Source: models/productsModel.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: index.js</h1>
+    <h1 class="page-title">Source: models/productsModel.js</h1>
 
     
 
@@ -27,64 +27,34 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file index.js is the root file of this doc
- * @author S. M. Shahriar
+ * Product Schema
+ * @module productsModel
  */
-
-const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
-const helmet = require('helmet');
-const logger = require('morgan');
+const uniqueValidator = require('mongoose-unique-validator');
 
-// Routes Import
-const productRoute = require('./routes/productsRoute');
-
-const app = express();
-
-// Middlewares
-app.use(helmet());
-app.use(cors());
-app.use(logger('tiny'));
-app.use(express.json());
-
-// Routes
-app.use('/api/product', productRoute);
-
-// Error handler
-app.use((error, req, res, next) => {
-  if (error.status) {
-    res.status(error.status);
-  } else {
-    res.status(500);
-  }
-
-  if (process.env.NODE_ENV === 'production') {
-    res.json({
-      message: error.message,
-    });
-  } else {
-    res.json({
-      message: error.message,
-      stack: error.stack,
-    });
-  }
+/**
+ * @constructor productSchema
+ * @property {String} title - title of the product
+ * @property {String} imageUrl - url of the product image
+ * @property {String} description - description of the product
+ * @property {Number} price - price of the product
+ * @property {String} category - category name of the product
+ * @property {Boolean} isArchive - is product archive?
+ */
+const productSchema = new mongoose.Schema({
+  title: { type: String, required: true, unique: true },
+  imageUrl: { type: String, required: true },
+  description: { type: String, required: true, minlength: 10 },
+  price: { type: Number, required: true },
+  category: { type: String, required: true },
+  isArchive: { type: Boolean, default: false },
 });
 
-// MongoDB connection and Server startup
-mongoose
-  .connect('mongodb://localhost/dailypick', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-  })
-  .then(() => {
-    console.log('db connected!');
-    app.listen('8000' || process.env.PORT, () =>
-      console.log('server started!')
-    );
-  })
-  .catch((err) => console.error(err.message));
+productSchema.plugin(uniqueValidator);
+
+// Export Product Model
+module.exports = mongoose.model('Product', productSchema);
 </code></pre>
         </article>
     </section>

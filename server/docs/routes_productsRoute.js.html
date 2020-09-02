@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: index.js</title>
+    <title>JSDoc: Source: routes/productsRoute.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: index.js</h1>
+    <h1 class="page-title">Source: routes/productsRoute.js</h1>
 
     
 
@@ -27,64 +27,42 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file index.js is the root file of this doc
- * @author S. M. Shahriar
+ * Products Route Module
+ * @module productsRoute
  */
 
 const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const helmet = require('helmet');
-const logger = require('morgan');
+const { body } = require('express-validator');
+const router = express.Router();
 
-// Routes Import
-const productRoute = require('./routes/productsRoute');
+const productsController = require('../controllers/productsController');
 
-const app = express();
+// Products Routes
+router.get('/', productsController.getProducts);
+router.get('/:pid', productsController.getProductById);
+router.post(
+  '/add',
+  body('title').not().isEmpty(),
+  body('imageUrl').isURL(),
+  body('description').isLength({ min: 10 }),
+  body('category').not().isEmpty(),
+  body('price').not().isEmpty().isNumeric(),
+  productsController.addProduct
+);
+router.patch(
+  '/update/:pid',
+  body('title').not().isEmpty(),
+  body('imageUrl').isURL(),
+  body('description').isLength({ min: 10 }),
+  body('category').not().isEmpty(),
+  body('price').not().isEmpty().isNumeric(),
+  productsController.updateProduct
+);
+router.patch('/archive/:pid', productsController.archiveProduct);
+router.delete('/delete/:pid', productsController.deleteProduct);
 
-// Middlewares
-app.use(helmet());
-app.use(cors());
-app.use(logger('tiny'));
-app.use(express.json());
-
-// Routes
-app.use('/api/product', productRoute);
-
-// Error handler
-app.use((error, req, res, next) => {
-  if (error.status) {
-    res.status(error.status);
-  } else {
-    res.status(500);
-  }
-
-  if (process.env.NODE_ENV === 'production') {
-    res.json({
-      message: error.message,
-    });
-  } else {
-    res.json({
-      message: error.message,
-      stack: error.stack,
-    });
-  }
-});
-
-// MongoDB connection and Server startup
-mongoose
-  .connect('mongodb://localhost/dailypick', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-  })
-  .then(() => {
-    console.log('db connected!');
-    app.listen('8000' || process.env.PORT, () =>
-      console.log('server started!')
-    );
-  })
-  .catch((err) => console.error(err.message));
+// Export Routes
+module.exports = router;
 </code></pre>
         </article>
     </section>

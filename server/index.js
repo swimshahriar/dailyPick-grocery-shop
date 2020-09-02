@@ -1,20 +1,27 @@
+/**
+ * @file index.js is the root file of this doc
+ * @author S. M. Shahriar
+ */
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const logger = require('morgan');
 
+// Routes Import
+const productRoute = require('./routes/productsRoute');
+
 const app = express();
 
+// Middlewares
 app.use(helmet());
 app.use(cors());
 app.use(logger('tiny'));
 app.use(express.json());
 
 // Routes
-app.get('/', (req, res, next) => {
-  res.json('Hello from server!');
-});
+app.use('/api/product', productRoute);
 
 // Error handler
 app.use((error, req, res, next) => {
