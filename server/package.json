@@ -1,0 +1,23 @@
+{
+  "name": "dailypick",
+  "version": "1.0.0",
+  "description": "dailyPick - online grocery shop",
+  "main": "index.js",
+  "author": "Shahriar",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon index.js",
+    "doc": "jsdoc -c jsdoc.json"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^4.1.0",
+    "mongoose": "^5.10.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "jsdoc": "^3.6.5",
+    "nodemon": "^2.0.4"
+  }
+}
