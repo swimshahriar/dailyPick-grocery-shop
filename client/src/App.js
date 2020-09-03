@@ -7,13 +7,25 @@ import {
 } from 'react-router-dom';
 
 import Home from './pages/Home';
+import AdminProducts from './pages/AdminProducts';
+import AdminDashboard from './pages/AdminDashboard';
+import AddProduct from './pages/AddProduct';
 
 const App = () => {
   return (
     <Router>
       <Switch>
-        <Route path="/">
+        <Route path="/" exact>
           <Home />
+        </Route>
+        <Route path="/admin" exact>
+          <AdminDashboard />
+        </Route>
+        <Route path="/admin/products" exact>
+          <AdminProducts />
+        </Route>
+        <Route path="/admin/products/add" exact>
+          <AddProduct />
         </Route>
         <Redirect to="/" />
       </Switch>

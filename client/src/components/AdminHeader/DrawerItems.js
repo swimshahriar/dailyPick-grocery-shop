@@ -10,15 +10,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   NavigateNext,
   LocalOfferOutlined,
-  ContactSupportOutlined,
+  ExitToAppOutlined,
+  DashboardOutlined,
+  ShoppingBasketOutlined,
 } from '@material-ui/icons';
-
-import AppleFuit from '../../assets/category/fruit.svg';
-import MeatFood from '../../assets/category/meat-food.svg';
-import Snacks from '../../assets/category/snacks.svg';
-import Cooking from '../../assets/category/cooking.svg';
-import Dairy from '../../assets/category/dairy.svg';
-import Beverage from '../../assets/category/beverage.svg';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   // necessary for content to be below app bar
@@ -31,52 +27,43 @@ const useStyles = makeStyles((theme) => ({
 
 const otherDirectiory = [
   {
-    name: 'Offers',
+    name: 'Help',
     icon: <LocalOfferOutlined />,
   },
   {
-    name: 'Contact',
-    icon: <ContactSupportOutlined />,
+    name: 'Logout',
+    icon: <ExitToAppOutlined />,
   },
 ];
 
 const category = [
   {
-    name: 'Fruits & Vegetables',
-    icon: AppleFuit,
+    name: 'Dashboard',
+    icon: <DashboardOutlined />,
+    url: '/admin',
   },
   {
-    name: 'Meat & Fish',
-    icon: MeatFood,
-  },
-  {
-    name: 'Snacks',
-    icon: Snacks,
-  },
-  {
-    name: 'Dairy',
-    icon: Dairy,
-  },
-  {
-    name: 'Cooking',
-    icon: Cooking,
-  },
-  {
-    name: 'Beverage',
-    icon: Beverage,
+    name: 'Products',
+    icon: <ShoppingBasketOutlined />,
+    url: '/admin/products',
   },
 ];
 
 const DrawerItems = () => {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <div>
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {otherDirectiory.map((item) => (
-          <ListItem button key={item.name}>
+        {category.map((item) => (
+          <ListItem
+            button
+            key={item.name}
+            onClick={() => history.push(item.url)}
+          >
             <ListItemIcon>{item.icon}</ListItemIcon>
             <ListItemText primary={item.name} />
             <NavigateNext />
@@ -85,11 +72,9 @@ const DrawerItems = () => {
       </List>
       <Divider />
       <List>
-        {category.map((item) => (
+        {otherDirectiory.map((item) => (
           <ListItem button key={item.name}>
-            <ListItemIcon>
-              <img className={classes.img} src={item.icon} alt="Apple Fruit" />
-            </ListItemIcon>
+            <ListItemIcon>{item.icon}</ListItemIcon>
             <ListItemText primary={item.name} />
             <NavigateNext />
           </ListItem>

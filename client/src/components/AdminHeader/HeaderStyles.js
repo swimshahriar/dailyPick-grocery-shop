@@ -26,7 +26,6 @@ export default makeStyles((theme) => ({
     },
   },
   logo: {
-    
     [theme.breakpoints.up('sm')]: {
       width: 150,
     },

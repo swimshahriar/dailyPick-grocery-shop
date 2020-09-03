@@ -26,7 +26,7 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   carousel: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
     },
