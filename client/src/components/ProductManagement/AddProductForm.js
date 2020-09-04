@@ -17,16 +17,20 @@ import { useHistory } from 'react-router-dom';
 import useStyles from './AddProductFormStyles';
 import { useHttpClient } from '../../hooks/useHttpClient';
 import BackdropLoader from '../BackdropLoader/BackdropLoader';
+import SnackbarComp from '../Snackbar/SnackbarComp';
 
 const AddProductForm = () => {
   const history = useHistory();
   const classes = useStyles();
+
   const [category, setCategory] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);
   const [imageUrl, setImageUrl] = useState('');
   const [unitQty, setUnitQty] = useState('');
+  // snackbar
+  const [isOpen, setIsOpen] = useState(false);
 
   const { sendRequest, isLoading, error, clearError } = useHttpClient();
 
@@ -78,6 +82,7 @@ const AddProductForm = () => {
     } catch (error) {}
 
     if (!error) {
+      // reset states
       setCategory('');
       setDescription('');
       setImageUrl('');
@@ -85,13 +90,20 @@ const AddProductForm = () => {
       setTitle('');
       setUnitQty('');
 
-      history.push('/admin/products');
+      //show snackbar
+      setIsOpen(true);
+
+      setTimeout(() => {
+        //redirect to the products page
+        history.push('/admin/products');
+      }, 1700);
     }
   };
 
   return (
     <>
       {isLoading && <BackdropLoader isLoading={isLoading} />}
+
       <form
         className={classes.addForm}
         autoComplete="off"
@@ -187,6 +199,12 @@ const AddProductForm = () => {
           </CardActions>
         </Card>
       </form>
+      <SnackbarComp
+        severity="success"
+        message="Operation Success!"
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
     </>
   );
 };

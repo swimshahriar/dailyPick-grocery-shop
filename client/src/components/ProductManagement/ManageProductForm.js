@@ -17,6 +17,8 @@ import { useHistory } from 'react-router-dom';
 import useStyles from './AddProductFormStyles';
 import { useHttpClient } from '../../hooks/useHttpClient';
 import BackdropLoader from '../BackdropLoader/BackdropLoader';
+import SnackbarComp from '../Snackbar/SnackbarComp';
+import ModalComp from '../Modal/ModalComp';
 
 const ManageProductForm = ({ loadedProduct }) => {
   const history = useHistory();
@@ -30,6 +32,12 @@ const ManageProductForm = ({ loadedProduct }) => {
   const [imageUrl, setImageUrl] = useState(loadedProduct.imageUrl || '');
   const [unitQty, setUnitQty] = useState(loadedProduct.unitQty || '');
   const [isArchive, setIsArchive] = useState(loadedProduct.isArchive || false);
+
+  // snackbar
+  const [isOpen, setIsOpen] = useState(false);
+
+  //Modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { sendRequest, isLoading, error, clearError } = useHttpClient();
 
@@ -93,14 +101,21 @@ const ManageProductForm = ({ loadedProduct }) => {
       setTitle('');
       setUnitQty('');
 
-      history.push('/admin/products');
+      //show snackbar
+      setIsOpen(true);
+
+      setTimeout(() => {
+        //redirect to the products page
+        history.push('/admin/products');
+      }, 1700);
     }
   };
 
   // Delete Product handler
-  const deleteProductHandler = async (event) => {
-    event.preventDefault();
+  const deleteProductHandler = async () => {
     clearError();
+    // Modal close
+    setIsModalOpen(false);
 
     try {
       await sendRequest(
@@ -115,7 +130,13 @@ const ManageProductForm = ({ loadedProduct }) => {
         setTitle('');
         setUnitQty('');
 
-        history.push('/admin/products');
+        //show snackbar
+        setIsOpen(true);
+
+        setTimeout(() => {
+          //redirect to the products page
+          history.push('/admin/products');
+        }, 1700);
       }
     } catch (error) {}
   };
@@ -221,7 +242,10 @@ const ManageProductForm = ({ loadedProduct }) => {
               color="primary"
               type="submit"
               className={classes.submitBtn}
-              onClick={deleteProductHandler}
+              onClick={(event) => {
+                event.preventDefault();
+                setIsModalOpen(true);
+              }}
             >
               Delete
             </Button>
@@ -238,6 +262,21 @@ const ManageProductForm = ({ loadedProduct }) => {
           </CardActions>
         </Card>
       </form>
+      {isOpen && (
+        <SnackbarComp
+          severity="success"
+          message="Operation Success!"
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
+      )}
+      {isModalOpen && (
+        <ModalComp
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          confirmHandler={deleteProductHandler}
+        />
+      )}
     </>
   );
 };
