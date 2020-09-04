@@ -19,6 +19,7 @@ router.post(
   body('description').isLength({ min: 10 }),
   body('category').not().isEmpty(),
   body('price').not().isEmpty().isNumeric(),
+  body('unitQty').not().isEmpty(),
   productsController.addProduct
 );
 router.patch(
@@ -28,9 +29,10 @@ router.patch(
   body('description').isLength({ min: 10 }),
   body('category').not().isEmpty(),
   body('price').not().isEmpty().isNumeric(),
+  body('unitQty').not().isEmpty(),
+  body('isArchive').not().isEmpty(),
   productsController.updateProduct
 );
-router.patch('/archive/:pid', productsController.archiveProduct);
 router.delete('/delete/:pid', productsController.deleteProduct);
 
 // Export Routes

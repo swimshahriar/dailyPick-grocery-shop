@@ -11,22 +11,25 @@ import {
   InputLabel,
   Typography,
 } from '@material-ui/core';
-import { AddCircleOutlineOutlined } from '@material-ui/icons';
+import { UpdateOutlined, DeleteOutlined } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 
 import useStyles from './AddProductFormStyles';
 import { useHttpClient } from '../../hooks/useHttpClient';
 import BackdropLoader from '../BackdropLoader/BackdropLoader';
 
-const AddProductForm = () => {
+const ManageProductForm = ({ loadedProduct }) => {
   const history = useHistory();
   const classes = useStyles();
-  const [category, setCategory] = useState('');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState(0);
-  const [imageUrl, setImageUrl] = useState('');
-  const [unitQty, setUnitQty] = useState('');
+  const [category, setCategory] = useState(loadedProduct.category || '');
+  const [title, setTitle] = useState(loadedProduct.title || '');
+  const [description, setDescription] = useState(
+    loadedProduct.description || ''
+  );
+  const [price, setPrice] = useState(loadedProduct.price || 0);
+  const [imageUrl, setImageUrl] = useState(loadedProduct.imageUrl || '');
+  const [unitQty, setUnitQty] = useState(loadedProduct.unitQty || '');
+  const [isArchive, setIsArchive] = useState(loadedProduct.isArchive || false);
 
   const { sendRequest, isLoading, error, clearError } = useHttpClient();
 
@@ -54,6 +57,10 @@ const AddProductForm = () => {
     setUnitQty(event.target.value);
   };
 
+  const archiveChangeHandler = (event) => {
+    setIsArchive(event.target.value);
+  };
+
   // Making http request to the server
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -61,8 +68,8 @@ const AddProductForm = () => {
 
     try {
       await sendRequest(
-        'http://localhost:8000/api/product/add',
-        'POST',
+        `http://localhost:8000/api/product/update/${loadedProduct._id}`,
+        'PATCH',
         JSON.stringify({
           title,
           description,
@@ -70,6 +77,7 @@ const AddProductForm = () => {
           imageUrl,
           category,
           unitQty,
+          isArchive,
         }),
         {
           'Content-Type': 'application/json',
@@ -173,16 +181,38 @@ const AddProductForm = () => {
                 <MenuItem value={'Beverage'}>Beverage</MenuItem>
               </Select>
             </FormControl>
+            <FormControl variant="filled" className={classes.inputField}>
+              <InputLabel id="archive">Archive</InputLabel>
+              <Select
+                required
+                labelId="archive"
+                id="archive"
+                value={isArchive}
+                onChange={archiveChangeHandler}
+              >
+                <MenuItem value={'false'}>False</MenuItem>
+                <MenuItem value={'true'}>True</MenuItem>
+              </Select>
+            </FormControl>
           </CardContent>
           <CardActions className={classes.cardActions}>
             <Button
-              startIcon={<AddCircleOutlineOutlined />}
+              startIcon={<DeleteOutlined />}
+              variant="outlined"
+              color="primary"
+              type="submit"
+              className={classes.submitBtn}
+            >
+              Delete
+            </Button>
+            <Button
+              startIcon={<UpdateOutlined />}
               variant="contained"
               color="primary"
               type="submit"
               className={classes.submitBtn}
             >
-              Add Product
+              Update Product
             </Button>
           </CardActions>
         </Card>
@@ -191,4 +221,4 @@ const AddProductForm = () => {
   );
 };
 
-export default AddProductForm;
+export default ManageProductForm;

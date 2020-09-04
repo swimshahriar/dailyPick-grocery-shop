@@ -62,7 +62,7 @@ const getProductById = async (req, res, next) => {
  * @param {*} next - Go to the next line
  */
 const addProduct = async (req, res, next) => {
-  const { title, imageUrl, description, price, category } = req.body;
+  const { title, imageUrl, description, price, category, unitQty } = req.body;
 
   /**
    * @property {string} errors
@@ -78,6 +78,7 @@ const addProduct = async (req, res, next) => {
     imageUrl,
     price,
     category,
+    unitQty,
   });
 
   try {
@@ -98,7 +99,15 @@ const addProduct = async (req, res, next) => {
  * @param {*} next - Go to the next line
  */
 const updateProduct = async (req, res, next) => {
-  const { title, description, price, category, imageUrl } = req.body;
+  const {
+    title,
+    description,
+    price,
+    category,
+    imageUrl,
+    unitQty,
+    isArchive,
+  } = req.body;
   const { pid } = req.params;
 
   /**
@@ -136,41 +145,20 @@ const updateProduct = async (req, res, next) => {
   existingProduct.description = description;
   // @ts-ignore
   existingProduct.price = price;
+  // @ts-ignore
+  existingProduct.unitQty = unitQty;
+  // @ts-ignore
+  existingProduct.isArchive = isArchive;
 
   let updatedProduct;
   try {
     updatedProduct = await existingProduct.save();
-    // updatedProduct = await Product.findOneAndUpdate(
-    //   { _id: pid },
-    //   { title, description, price, category, imageUrl }
-    // );
   } catch (error) {
     const err = new Error(error.message);
     return next(err);
   }
 
   res.status(200).json(updatedProduct);
-};
-
-/**
- * Archive Product
- * @function archiveProduct
- * @param {*} req - Incoming requests
- * @param {*} res - Outgoing responses
- * @param {*} next - Go to the next line
- */
-const archiveProduct = async (req, res, next) => {
-  const { isArchive } = req.body;
-  const { pid } = req.params;
-
-  try {
-    await Product.findOneAndUpdate({ _id: pid }, { isArchive });
-  } catch (error) {
-    const err = new Error(error.message);
-    return next(err);
-  }
-
-  res.status(200).json('Product Archived!');
 };
 
 /**
@@ -198,5 +186,4 @@ exports.getProducts = getProducts;
 exports.getProductById = getProductById;
 exports.addProduct = addProduct;
 exports.updateProduct = updateProduct;
-exports.archiveProduct = archiveProduct;
 exports.deleteProduct = deleteProduct;

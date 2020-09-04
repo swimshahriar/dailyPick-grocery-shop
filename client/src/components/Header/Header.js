@@ -17,6 +17,7 @@ import {
   DashboardOutlined,
   ExitToAppOutlined,
 } from '@material-ui/icons';
+import { Link } from 'react-router-dom';
 
 import DrawerComp from './DrawerComp';
 import useStyles from './HeaderStyles';
@@ -60,7 +61,9 @@ const Header = (props) => {
             >
               <MenuIcon />
             </IconButton>
-            <img className={classes.logo} src={Logo} alt="Logo" />
+            <Link to="/">
+              <img className={classes.logo} src={Logo} alt="Logo" />
+            </Link>
           </Toolbar>
 
           <div className={classes.headerIcons}>

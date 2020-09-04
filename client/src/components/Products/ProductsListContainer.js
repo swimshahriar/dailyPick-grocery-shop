@@ -15,23 +15,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProductsListContainer = () => {
+const ProductsListContainer = ({ products }) => {
   const classes = useStyles();
 
   return (
     <Grid container spacing={2} className={classes.gridContainer}>
-      <Product />
-      <Product />
-      <Product />
-      <Product />
-      <Product />
-      <Product />
-      <Product />
-      <Product />
-      <Product />
-      <Product />
-      <Product />
-      <Product />
+      {products.map((item) => (
+        <Product key={item._id} product={item} />
+      ))}
     </Grid>
   );
 };

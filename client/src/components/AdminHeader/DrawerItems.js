@@ -14,7 +14,7 @@ import {
   DashboardOutlined,
   ShoppingBasketOutlined,
 } from '@material-ui/icons';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   // necessary for content to be below app bar
@@ -51,7 +51,6 @@ const category = [
 
 const DrawerItems = () => {
   const classes = useStyles();
-  const history = useHistory();
 
   return (
     <div>
@@ -59,15 +58,13 @@ const DrawerItems = () => {
       <Divider />
       <List>
         {category.map((item) => (
-          <ListItem
-            button
-            key={item.name}
-            onClick={() => history.push(item.url)}
-          >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.name} />
-            <NavigateNext />
-          </ListItem>
+          <Link to={item.url} key={item.name}>
+            <ListItem button key={item.name}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.name} />
+              <NavigateNext />
+            </ListItem>
+          </Link>
         ))}
       </List>
       <Divider />

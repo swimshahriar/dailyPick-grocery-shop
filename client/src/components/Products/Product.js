@@ -13,7 +13,7 @@ import { ShoppingBasketOutlined } from '@material-ui/icons';
 
 import useStyles from './ProductStyles';
 
-const Product = (props) => {
+const Product = ({ product }) => {
   const classes = useStyles();
 
   return (
@@ -23,17 +23,19 @@ const Product = (props) => {
           <div className={classes.cardImageContainer}>
             <CardMedia
               className={classes.cardImage}
-              image={
-                'https://res.cloudinary.com/redq-inc/image/upload/v1589614568/pickbazar/grocery/GreenLimes_jrodle.jpg'
-              }
+              image={product.imageUrl}
               title="Lime"
             />
           </div>
           <CardContent>
             <div className={classes.cardContent}>
-              <Typography variant="h6">Lime</Typography>
-              <Typography variant="h6" color="primary">
-                $1.5
+              <Typography variant="h6">{product.title}</Typography>
+              <Typography
+                variant="h6"
+                color="primary"
+                className={classes.prodPrice}
+              >
+                ${product.price}
               </Typography>
             </div>
             <Typography
@@ -41,10 +43,13 @@ const Product = (props) => {
               color="textSecondary"
               className={classes.qty}
             >
-              x12
+              {product.unitQty}
+            </Typography>
+            <Typography component="p" color="primary" className={classes.qty}>
+              {product.category}
             </Typography>
             <Typography variant="body1" color="textSecondary">
-              This is a product description. This is a product description.
+              {product.description}
             </Typography>
           </CardContent>
           <CardActions>

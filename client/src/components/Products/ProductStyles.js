@@ -19,6 +19,9 @@ export default makeStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  prodPrice: {
+    marginLeft: 10,
+  },
   qty: {
     marginBottom: 10,
   },

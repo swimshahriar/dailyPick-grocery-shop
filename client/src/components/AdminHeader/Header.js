@@ -16,14 +16,13 @@ import {
   DashboardOutlined,
   ExitToAppOutlined,
 } from '@material-ui/icons';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import DrawerComp from './DrawerComp';
 import useStyles from './HeaderStyles';
 import Logo from '../../assets/Logo.svg';
 
 const Header = (props) => {
-  const history = useHistory();
   const { window } = props;
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -61,12 +60,9 @@ const Header = (props) => {
             >
               <MenuIcon />
             </IconButton>
-            <img
-              className={classes.logo}
-              src={Logo}
-              alt="Logo"
-              onClick={() => history.push('/')}
-            />
+            <Link to="/">
+              <img className={classes.logo} src={Logo} alt="Logo" />
+            </Link>
           </Toolbar>
 
           <div className={classes.headerIcons}>
