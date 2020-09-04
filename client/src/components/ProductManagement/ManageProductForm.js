@@ -62,7 +62,7 @@ const ManageProductForm = ({ loadedProduct }) => {
   };
 
   // Making http request to the server
-  const submitHandler = async (event) => {
+  const updateProductHandler = async (event) => {
     event.preventDefault();
     clearError();
 
@@ -97,14 +97,33 @@ const ManageProductForm = ({ loadedProduct }) => {
     }
   };
 
+  // Delete Product handler
+  const deleteProductHandler = async (event) => {
+    event.preventDefault();
+    clearError();
+
+    try {
+      await sendRequest(
+        `http://localhost:8000/api/product/delete/${loadedProduct._id}`,
+        'DELETE'
+      );
+      if (!error) {
+        setCategory('');
+        setDescription('');
+        setImageUrl('');
+        setPrice(0);
+        setTitle('');
+        setUnitQty('');
+
+        history.push('/admin/products');
+      }
+    } catch (error) {}
+  };
+
   return (
     <>
       {isLoading && <BackdropLoader isLoading={isLoading} />}
-      <form
-        className={classes.addForm}
-        autoComplete="off"
-        onSubmit={submitHandler}
-      >
+      <form className={classes.addForm} autoComplete="off">
         <Card>
           <CardContent className={classes.inputFieldContainer}>
             {error && (
@@ -202,6 +221,7 @@ const ManageProductForm = ({ loadedProduct }) => {
               color="primary"
               type="submit"
               className={classes.submitBtn}
+              onClick={deleteProductHandler}
             >
               Delete
             </Button>
@@ -211,6 +231,7 @@ const ManageProductForm = ({ loadedProduct }) => {
               color="primary"
               type="submit"
               className={classes.submitBtn}
+              onClick={updateProductHandler}
             >
               Update Product
             </Button>
