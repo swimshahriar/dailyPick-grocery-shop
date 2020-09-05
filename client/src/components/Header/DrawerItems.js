@@ -12,6 +12,7 @@ import {
   LocalOfferOutlined,
   ContactSupportOutlined,
 } from '@material-ui/icons';
+import { Link } from 'react-router-dom';
 
 import AppleFuit from '../../assets/category/fruit.svg';
 import MeatFood from '../../assets/category/meat-food.svg';
@@ -19,6 +20,7 @@ import Snacks from '../../assets/category/snacks.svg';
 import Cooking from '../../assets/category/cooking.svg';
 import Dairy from '../../assets/category/dairy.svg';
 import Beverage from '../../assets/category/beverage.svg';
+import Breakfast from '../../assets/category/wheat-bread.svg';
 
 const useStyles = makeStyles((theme) => ({
   // necessary for content to be below app bar
@@ -42,11 +44,11 @@ const otherDirectiory = [
 
 const category = [
   {
-    name: 'Fruits & Vegetables',
+    name: 'Fruits and Vegetables',
     icon: AppleFuit,
   },
   {
-    name: 'Meat & Fish',
+    name: 'Meat and Fish',
     icon: MeatFood,
   },
   {
@@ -65,6 +67,10 @@ const category = [
     name: 'Beverage',
     icon: Beverage,
   },
+  {
+    name: 'Breakfast',
+    icon: Breakfast,
+  },
 ];
 
 const DrawerItems = () => {
@@ -76,23 +82,31 @@ const DrawerItems = () => {
       <Divider />
       <List>
         {otherDirectiory.map((item) => (
-          <ListItem button key={item.name}>
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.name} />
-            <NavigateNext />
-          </ListItem>
+          <Link to={`/category/${item.name}`}>
+            <ListItem button key={item.name}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.name} />
+              <NavigateNext />
+            </ListItem>
+          </Link>
         ))}
       </List>
       <Divider />
       <List>
         {category.map((item) => (
-          <ListItem button key={item.name}>
-            <ListItemIcon>
-              <img className={classes.img} src={item.icon} alt="Apple Fruit" />
-            </ListItemIcon>
-            <ListItemText primary={item.name} />
-            <NavigateNext />
-          </ListItem>
+          <Link to={`/category/${item.name}`}>
+            <ListItem button key={item.name}>
+              <ListItemIcon>
+                <img
+                  className={classes.img}
+                  src={item.icon}
+                  alt="Apple Fruit"
+                />
+              </ListItemIcon>
+              <ListItemText primary={item.name} />
+              <NavigateNext />
+            </ListItem>
+          </Link>
         ))}
       </List>
     </div>

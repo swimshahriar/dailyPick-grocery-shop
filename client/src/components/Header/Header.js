@@ -87,11 +87,13 @@ const Header = (props) => {
                 Login
               </Button>
             )}
-            <IconButton color="inherit">
-              <Badge color="primary" showZero badgeContent={0}>
-                <ShoppingBasketOutlined />
-              </Badge>
-            </IconButton>
+            <Link to="/cart">
+              <IconButton color="inherit">
+                <Badge color="primary" showZero badgeContent={0}>
+                  <ShoppingBasketOutlined />
+                </Badge>
+              </IconButton>
+            </Link>
 
             <Menu
               id="menu-appbar"

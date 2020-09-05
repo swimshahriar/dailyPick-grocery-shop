@@ -11,6 +11,7 @@ import AdminProducts from './pages/AdminProducts';
 import AdminDashboard from './pages/AdminDashboard';
 import AddProduct from './pages/AddProduct';
 import ManageProduct from './pages/ManageProduct';
+import CategoryProducts from './pages/CategoryProducts';
 
 const App = () => {
   return (
@@ -30,6 +31,9 @@ const App = () => {
         </Route>
         <Route path="/admin/products/manage/:pid">
           <ManageProduct />
+        </Route>
+        <Route path="/category/:cname">
+          <CategoryProducts />
         </Route>
         <Redirect to="/" />
       </Switch>

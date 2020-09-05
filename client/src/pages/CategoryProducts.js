@@ -1,48 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { LocalOfferOutlined } from '@material-ui/icons';
-import { Container, Typography } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
+import { Typography, Container, Grow } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { SentimentDissatisfiedOutlined } from '@material-ui/icons';
 
 import Header from '../components/Header/Header';
-import Carousel from '../components/Carousel/Carousel';
 import ProductsListContainer from '../components/Products/ProductsListContainer';
 import { useHttpClient } from '../hooks/useHttpClient';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
-  offerTitle: {
+  emptyContainer: {
     [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
     },
-    marginTop: 30,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
 }));
 
-const Home = () => {
+const CategoryProducts = () => {
   const { sendRequest } = useHttpClient();
   const [loadedProducts, setLoadedProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(8);
+  const [productsPerPage] = useState(12);
 
   const classes = useStyles();
+
+  // getting the category name from the url
+  const { cname } = useParams();
 
   useEffect(() => {
     try {
       const sendReq = async () => {
         const responseData = await sendRequest(
-          'http://localhost:8000/api/product/offer'
+          `http://localhost:8000/api/product/category/${cname}`
         );
 
         setLoadedProducts(responseData);
       };
       sendReq();
-    } catch (error) {}
-  }, [sendRequest]);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [sendRequest, cname]);
 
   // Pagination helper
   const indexOfLastPost = currentPage * productsPerPage;
@@ -56,13 +60,15 @@ const Home = () => {
     <>
       <Header />
       <main>
-        <Carousel />
-        <Container className={classes.offerTitle}>
-          <LocalOfferOutlined fontSize="large" />
-          <Typography variant="h4" color="textPrimary">
-            Current Offers
-          </Typography>
-        </Container>
+        {loadedProducts.length <= 0 && (
+          <Grow in timeout={500}>
+            <Container className={classes.emptyContainer}>
+              <SentimentDissatisfiedOutlined fontSize="large" />
+              <Typography variant="h4">No Products Found!</Typography>
+              <SentimentDissatisfiedOutlined fontSize="large" />
+            </Container>
+          </Grow>
+        )}
         {loadedProducts.length > 0 && (
           <>
             <ProductsListContainer products={currentProducts} />
@@ -79,4 +85,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default CategoryProducts;

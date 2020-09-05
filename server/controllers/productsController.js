@@ -17,7 +17,7 @@ const Product = require('../models/productsModel');
 // @ts-ignore
 const getProducts = async (req, res, next) => {
   /**
-   * @property {string} products
+   * @property {*} products
    */
   let products;
   try {
@@ -41,7 +41,7 @@ const getProductById = async (req, res, next) => {
   const { pid } = req.params;
 
   /**
-   * @property {string} products
+   * @property {*} products
    */
   let product;
   try {
@@ -55,6 +55,52 @@ const getProductById = async (req, res, next) => {
 };
 
 /**
+ * Get Products by Category
+ * @function getProductByCategory
+ * @param {*} req - Incoming requests
+ * @param {*} res - Outgoing responses
+ * @param {*} next - Go to the next line
+ */
+const getProductByCategory = async (req, res, next) => {
+  const { cname } = req.params;
+
+  /**
+   * @property {*} filteredProduct
+   */
+  let filteredProduct;
+  try {
+    filteredProduct = await Product.find({ category: cname });
+  } catch (error) {
+    const err = new Error(error.message);
+    return next(err);
+  }
+
+  res.status(200).json(filteredProduct);
+};
+
+/**
+ * Get Products by Offer
+ * @function getProductByOffer
+ * @param {*} req - Incoming requests
+ * @param {*} res - Outgoing responses
+ * @param {*} next - Go to the next line
+ */
+const getProductByOffer = async (req, res, next) => {
+  /**
+   * @property {*} products
+   */
+  let products;
+  try {
+    products = await Product.find({ offerPrice: { $gt: 0 } });
+  } catch (error) {
+    const err = new Error(error.message);
+    return next(err);
+  }
+
+  res.status(200).json(products);
+};
+
+/**
  * Add Products
  * @function addProduct
  * @param {*} req - Incoming requests
@@ -64,9 +110,6 @@ const getProductById = async (req, res, next) => {
 const addProduct = async (req, res, next) => {
   const { title, imageUrl, description, price, category, unitQty } = req.body;
 
-  /**
-   * @property {string} errors
-   */
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.json({ errors: errors.array() });
@@ -103,6 +146,7 @@ const updateProduct = async (req, res, next) => {
     title,
     description,
     price,
+    offerPrice,
     category,
     imageUrl,
     unitQty,
@@ -110,9 +154,6 @@ const updateProduct = async (req, res, next) => {
   } = req.body;
   const { pid } = req.params;
 
-  /**
-   * @property {string} errors
-   */
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -120,7 +161,7 @@ const updateProduct = async (req, res, next) => {
   }
 
   /**
-   * @property {string} existingProduct
+   * @property {*} existingProduct
    */
   let existingProduct;
   try {
@@ -145,6 +186,8 @@ const updateProduct = async (req, res, next) => {
   existingProduct.description = description;
   // @ts-ignore
   existingProduct.price = price;
+  // @ts-ignore
+  existingProduct.offerPrice = offerPrice;
   // @ts-ignore
   existingProduct.unitQty = unitQty;
   // @ts-ignore
@@ -184,6 +227,8 @@ const deleteProduct = async (req, res, next) => {
 // Export functions
 exports.getProducts = getProducts;
 exports.getProductById = getProductById;
+exports.getProductByCategory = getProductByCategory;
+exports.getProductByOffer = getProductByOffer;
 exports.addProduct = addProduct;
 exports.updateProduct = updateProduct;
 exports.deleteProduct = deleteProduct;

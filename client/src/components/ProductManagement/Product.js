@@ -10,6 +10,7 @@ import {
   Button,
 } from '@material-ui/core';
 import { SettingsOutlined } from '@material-ui/icons';
+import classNames from 'classnames';
 
 import useStyles from './ProductStyles';
 import { Link } from 'react-router-dom';
@@ -31,13 +32,27 @@ const Product = ({ product }) => {
           <CardContent>
             <div className={classes.cardContent}>
               <Typography variant="h6">{product.title}</Typography>
-              <Typography
-                variant="h6"
-                color="primary"
-                className={classes.prodPrice}
-              >
-                ${product.price}
-              </Typography>
+              <div className={classes.priceSection}>
+                <Typography
+                  variant="h6"
+                  color="primary"
+                  className={classNames(
+                    classes.prodPrice,
+                    product.offerPrice && classes.offer
+                  )}
+                >
+                  ${product.price}
+                </Typography>
+                {product.offerPrice > 0 && (
+                  <Typography
+                    variant="h6"
+                    color="primary"
+                    className={classes.prodPrice}
+                  >
+                    ${product.offerPrice}
+                  </Typography>
+                )}
+              </div>
             </div>
             <Typography
               component="p"

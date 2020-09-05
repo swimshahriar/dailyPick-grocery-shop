@@ -19,8 +19,18 @@ export default makeStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  priceSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
   prodPrice: {
     marginLeft: 10,
+  },
+  offer: {
+    textDecoration: 'line-through',
+    color: theme.palette.error.main,
   },
   qty: {
     marginBottom: 10,

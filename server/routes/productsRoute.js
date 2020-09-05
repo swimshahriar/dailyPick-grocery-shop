@@ -10,8 +10,10 @@ const router = express.Router();
 const productsController = require('../controllers/productsController');
 
 // Products Routes
+router.get('/offer', productsController.getProductByOffer);
 router.get('/', productsController.getProducts);
 router.get('/:pid', productsController.getProductById);
+router.get('/category/:cname', productsController.getProductByCategory);
 router.post(
   '/add',
   body('title').not().isEmpty(),

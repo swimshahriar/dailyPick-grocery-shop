@@ -29,6 +29,7 @@ const ManageProductForm = ({ loadedProduct }) => {
     loadedProduct.description || ''
   );
   const [price, setPrice] = useState(loadedProduct.price || 0);
+  const [offerPrice, setOfferPrice] = useState(loadedProduct.offerPrice || 0);
   const [imageUrl, setImageUrl] = useState(loadedProduct.imageUrl || '');
   const [unitQty, setUnitQty] = useState(loadedProduct.unitQty || '');
   const [isArchive, setIsArchive] = useState(loadedProduct.isArchive || false);
@@ -57,6 +58,10 @@ const ManageProductForm = ({ loadedProduct }) => {
     setPrice(event.target.value);
   };
 
+  const offerPriceChangeHandler = (event) => {
+    setOfferPrice(event.target.value);
+  };
+
   const imageUrlChangeHandler = (event) => {
     setImageUrl(event.target.value);
   };
@@ -82,6 +87,7 @@ const ManageProductForm = ({ loadedProduct }) => {
           title,
           description,
           price,
+          offerPrice,
           imageUrl,
           category,
           unitQty,
@@ -98,6 +104,7 @@ const ManageProductForm = ({ loadedProduct }) => {
       setDescription('');
       setImageUrl('');
       setPrice(0);
+      setOfferPrice(0);
       setTitle('');
       setUnitQty('');
 
@@ -181,6 +188,16 @@ const ManageProductForm = ({ loadedProduct }) => {
               className={classes.inputField}
               value={price}
               onChange={priceChangeHandler}
+            />
+            <TextField
+              required
+              id="offerPrice"
+              label="Offer Price"
+              variant="filled"
+              type="number"
+              className={classes.inputField}
+              value={offerPrice}
+              onChange={offerPriceChangeHandler}
             />
             <TextField
               required
