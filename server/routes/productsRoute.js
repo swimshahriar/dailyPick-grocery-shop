@@ -9,11 +9,19 @@ const router = express.Router();
 
 const productsController = require('../controllers/productsController');
 
-// Products Routes
+/**
+ * @func router - Products Routes
+ * @property {*} get - get property
+ * @property {*} post - post property
+ * @property {*} patch - patch property
+ * @property {*} delete - delete property
+ */
+router.get('/archive/all', productsController.getProductByArchive);
 router.get('/offer', productsController.getProductByOffer);
 router.get('/', productsController.getProducts);
 router.get('/:pid', productsController.getProductById);
 router.get('/category/:cname', productsController.getProductByCategory);
+router.get('/search/:cname/q=:text', productsController.getProductBySearchText);
 router.post(
   '/add',
   body('title').not().isEmpty(),

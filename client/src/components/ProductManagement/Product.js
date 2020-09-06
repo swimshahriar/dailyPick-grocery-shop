@@ -54,6 +54,7 @@ const Product = ({ product }) => {
                 )}
               </div>
             </div>
+
             <Typography
               component="p"
               color="textSecondary"
@@ -61,6 +62,15 @@ const Product = ({ product }) => {
             >
               {product.unitQty}
             </Typography>
+            {product.isArchive === true && (
+              <Typography
+                component="p"
+                style={{ color: 'red' }}
+                className={classes.qty}
+              >
+                Archived
+              </Typography>
+            )}
             <Typography component="p" color="primary" className={classes.qty}>
               {product.category}
             </Typography>

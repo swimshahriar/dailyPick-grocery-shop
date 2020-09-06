@@ -27,6 +27,9 @@ const productSchema = new mongoose.Schema({
   isArchive: { type: Boolean, default: false },
 });
 
+// creating an index
+productSchema.index({ title: 'text' });
+
 productSchema.plugin(uniqueValidator);
 
 // Export Product Model

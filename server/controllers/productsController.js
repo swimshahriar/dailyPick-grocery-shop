@@ -21,7 +21,7 @@ const getProducts = async (req, res, next) => {
    */
   let products;
   try {
-    products = await Product.find();
+    products = await Product.find({ isArchive: false });
   } catch (error) {
     const err = new Error(error.message);
     return next(err);
@@ -69,7 +69,7 @@ const getProductByCategory = async (req, res, next) => {
    */
   let filteredProduct;
   try {
-    filteredProduct = await Product.find({ category: cname });
+    filteredProduct = await Product.find({ category: cname, isArchive: false });
   } catch (error) {
     const err = new Error(error.message);
     return next(err);
@@ -91,7 +91,66 @@ const getProductByOffer = async (req, res, next) => {
    */
   let products;
   try {
-    products = await Product.find({ offerPrice: { $gt: 0 } });
+    products = await Product.find({ offerPrice: { $gt: 0 }, isArchive: false });
+  } catch (error) {
+    const err = new Error(error.message);
+    return next(err);
+  }
+
+  res.status(200).json(products);
+};
+
+/**
+ * Get Products by Archive
+ * @function getProductByArchive
+ * @param {*} req - Incoming requests
+ * @param {*} res - Outgoing responses
+ * @param {*} next - Go to the next line
+ */
+const getProductByArchive = async (req, res, next) => {
+  /**
+   * @property {*} products
+   */
+  let products;
+  try {
+    products = await Product.find({ isArchive: true });
+  } catch (error) {
+    const err = new Error(error.message);
+    return next(err);
+  }
+
+  res.status(200).json(products);
+};
+
+/**
+ * Get Products by Search Text
+ * @function getProductBySearchText
+ * @param {*} req - Incoming requests
+ * @param {*} res - Outgoing responses
+ * @param {*} next - Go to the next line
+ */
+const getProductBySearchText = async (req, res, next) => {
+  const { text, cname } = req.params;
+
+  /**
+   * @property {*} products
+   */
+  let products;
+  try {
+    if (cname === 'all') {
+      products = await Product.find({
+        $text: {
+          $search: text,
+        },
+        isArchive: false,
+      });
+    } else {
+      products = await Product.find({
+        category: cname,
+        $text: { $search: text },
+        isArchive: false,
+      });
+    }
   } catch (error) {
     const err = new Error(error.message);
     return next(err);
@@ -229,6 +288,8 @@ exports.getProducts = getProducts;
 exports.getProductById = getProductById;
 exports.getProductByCategory = getProductByCategory;
 exports.getProductByOffer = getProductByOffer;
+exports.getProductByArchive = getProductByArchive;
+exports.getProductBySearchText = getProductBySearchText;
 exports.addProduct = addProduct;
 exports.updateProduct = updateProduct;
 exports.deleteProduct = deleteProduct;
