@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Grid,
   Card,
@@ -13,8 +13,10 @@ import { ShoppingBasketOutlined } from '@material-ui/icons';
 import classNames from 'classnames';
 
 import useStyles from './ProductStyles';
+import { ShopContext } from '../../context/shopContext';
 
 const Product = ({ product }) => {
+  const shopContext = useContext(ShopContext);
   const classes = useStyles();
 
   return (
@@ -73,6 +75,7 @@ const Product = ({ product }) => {
               variant="outlined"
               color="primary"
               fullWidth
+              onClick={() => shopContext.addItemToCart(product)}
             >
               Add To Cart
             </Button>

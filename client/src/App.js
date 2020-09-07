@@ -12,6 +12,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import AddProduct from './pages/AddProduct';
 import ManageProduct from './pages/ManageProduct';
 import CategoryProducts from './pages/CategoryProducts';
+import Cart from './pages/Cart';
 
 const App = () => {
   return (
@@ -19,6 +20,9 @@ const App = () => {
       <Switch>
         <Route path="/" exact>
           <Home />
+        </Route>
+        <Route path="/cart" exact>
+          <Cart />
         </Route>
         <Route path="/admin" exact>
           <AdminDashboard />

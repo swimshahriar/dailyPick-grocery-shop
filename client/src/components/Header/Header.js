@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   AppBar,
   CssBaseline,
@@ -18,18 +18,30 @@ import {
   ExitToAppOutlined,
 } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
+import { ShopContext } from '../../context/shopContext';
 
 import DrawerComp from './DrawerComp';
 import useStyles from './HeaderStyles';
 import Logo from '../../assets/Logo.svg';
 
 const Header = (props) => {
+  const shopContext = useContext(ShopContext);
   const { window } = props;
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [itemCount, setItemCount] = useState(0);
   const open = Boolean(anchorEl);
+
+  // updating itemCount state
+  useEffect(() => {
+    let itemCount = 0;
+    shopContext.cart.forEach((item) => {
+      itemCount += item.qty;
+    });
+    setItemCount(itemCount);
+  }, [shopContext.cart]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -89,7 +101,7 @@ const Header = (props) => {
             )}
             <Link to="/cart">
               <IconButton color="inherit">
-                <Badge color="primary" showZero badgeContent={0}>
+                <Badge color="primary" showZero badgeContent={itemCount}>
                   <ShoppingBasketOutlined />
                 </Badge>
               </IconButton>

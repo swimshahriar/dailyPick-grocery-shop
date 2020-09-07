@@ -4,11 +4,14 @@ import { ThemeProvider } from '@material-ui/core/styles';
 
 import App from './App';
 import theme from './theme.js';
+import ShopContextProvider from './context/shopContext';
 import './index.css';
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
-    <App />
+    <ShopContextProvider>
+      <App />
+    </ShopContextProvider>
   </ThemeProvider>,
   document.getElementById('root')
 );
