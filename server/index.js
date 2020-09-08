@@ -11,6 +11,7 @@ const logger = require('morgan');
 
 // Routes Import
 const productRoute = require('./routes/productsRoute');
+const usersRoute = require('./routes/usersRoute');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/product', productRoute);
+app.use('/api/user', usersRoute);
 
 // Error handler
 app.use((error, req, res, next) => {
