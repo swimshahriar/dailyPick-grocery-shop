@@ -17,7 +17,8 @@ import {
   DashboardOutlined,
   ExitToAppOutlined,
 } from '@material-ui/icons';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+
 import { ShopContext } from '../../context/shopContext';
 
 import DrawerComp from './DrawerComp';
@@ -26,11 +27,11 @@ import Logo from '../../assets/Logo.svg';
 
 const Header = (props) => {
   const shopContext = useContext(ShopContext);
+  const history = useHistory();
   const { window } = props;
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [itemCount, setItemCount] = useState(0);
   const open = Boolean(anchorEl);
 
@@ -79,7 +80,7 @@ const Header = (props) => {
           </Toolbar>
 
           <div className={classes.headerIcons}>
-            {isLoggedIn ? (
+            {shopContext.token ? (
               <IconButton
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
@@ -94,7 +95,7 @@ const Header = (props) => {
                 variant="outlined"
                 color="primary"
                 startIcon={<VpnKeyOutlined />}
-                onClick={() => setIsLoggedIn(!isLoggedIn)}
+                onClick={() => history.push('/auth')}
               >
                 Login
               </Button>
@@ -128,7 +129,7 @@ const Header = (props) => {
               <MenuItem onClick={handleClose}>
                 <Button
                   startIcon={<ExitToAppOutlined />}
-                  onClick={() => setIsLoggedIn(!isLoggedIn)}
+                  onClick={() => shopContext.logout()}
                 >
                   Logout
                 </Button>

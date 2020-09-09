@@ -13,6 +13,7 @@ import AddProduct from './pages/AddProduct';
 import ManageProduct from './pages/ManageProduct';
 import CategoryProducts from './pages/CategoryProducts';
 import Cart from './pages/Cart';
+import Auth from './pages/Auth';
 
 const App = () => {
   return (
@@ -20,6 +21,9 @@ const App = () => {
       <Switch>
         <Route path="/" exact>
           <Home />
+        </Route>
+        <Route path="/auth" exact>
+          <Auth />
         </Route>
         <Route path="/cart" exact>
           <Cart />

@@ -5,9 +5,14 @@ import {
   RemoveItemFromCart,
   ReduceItemQtyFromCart,
   ClearCart,
-} from './reducers';
+} from './cartReducers';
+import { authReducer, Login, Logout } from './authReducers';
 
 export const ShopContext = createContext({
+  token: null,
+  userId: null,
+  login: (userId, token) => {},
+  logout: (state) => {},
   cart: [],
   totalPrice: 0,
   addItemToCart: (product) => {},
@@ -18,6 +23,22 @@ export const ShopContext = createContext({
 
 const ShopContextProvider = (props) => {
   const [state, dispatch] = useReducer(cartReducer, { cart: [] });
+  const [authState, dispatchAuth] = useReducer(authReducer, {
+    token: null,
+    userId: null,
+  });
+
+  // login
+  const login = (userId, token) => {
+    // @ts-ignore
+    dispatchAuth({ type: Login, userId, token });
+  };
+
+  // logout
+  const logout = (authState) => {
+    // @ts-ignore
+    dispatchAuth({ type: Logout });
+  };
 
   const addItemToCart = (product) => {
     // @ts-ignore
@@ -42,6 +63,12 @@ const ShopContextProvider = (props) => {
   return (
     <ShopContext.Provider
       value={{
+        // @ts-ignore
+        token: authState.token,
+        // @ts-ignore
+        userId: authState.userId,
+        login,
+        logout,
         cart: state.cart,
         totalPrice: state.totalPrice || 0,
         addItemToCart,

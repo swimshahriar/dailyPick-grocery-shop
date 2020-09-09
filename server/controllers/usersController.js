@@ -5,9 +5,9 @@
 
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const User = require('../models/usersModel');
-const { create } = require('../models/usersModel');
 
 /**
  * Register an user
@@ -18,6 +18,7 @@ const { create } = require('../models/usersModel');
  */
 const registerUser = async (req, res, next) => {
   const { fName, lName, email, password } = req.body;
+  console.log(fName, lName, email, password);
 
   const errors = validationResult(req);
 
@@ -65,8 +66,22 @@ const registerUser = async (req, res, next) => {
     return next(err);
   }
 
-  res.status(201).json({
-    message: 'User created successfully!',
+  // creating token
+  let token;
+  try {
+    token = jwt.sign(
+      // @ts-ignore
+      { userId: createdUser._id, email: createdUser.email },
+      'jwt_super_secret_key',
+      { expiresIn: '3h' }
+    );
+  } catch (error) {
+    const err = new Error(error.message);
+    return next(err);
+  }
+
+  res.status(200).json({
+    token,
     userId: createdUser._id,
   });
 };
@@ -117,8 +132,22 @@ const loginUser = async (req, res, next) => {
     return next(error);
   }
 
+  // creating a jwt
+  let token;
+  try {
+    token = jwt.sign(
+      // @ts-ignore
+      { userId: existingUser._id, email: existingUser.email },
+      'jwt_super_secret_key',
+      { expiresIn: '3h' }
+    );
+  } catch (error) {
+    const err = new Error(error.message);
+    return next(err);
+  }
+
   // if password is correct
-  res.status(200).json({ userId: existingUser._id, user: existingUser });
+  res.status(200).json({ userId: existingUser._id, token });
 };
 
 // export
