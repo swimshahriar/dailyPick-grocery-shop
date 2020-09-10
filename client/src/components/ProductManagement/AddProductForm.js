@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   TextField,
   Card,
@@ -18,10 +18,12 @@ import useStyles from './AddProductFormStyles';
 import { useHttpClient } from '../../hooks/useHttpClient';
 import BackdropLoader from '../BackdropLoader/BackdropLoader';
 import SnackbarComp from '../Snackbar/SnackbarComp';
+import { ShopContext } from '../../context/shopContext';
 
 const AddProductForm = () => {
   const history = useHistory();
   const classes = useStyles();
+  const shopContext = useContext(ShopContext);
 
   const [category, setCategory] = useState('');
   const [title, setTitle] = useState('');
@@ -77,6 +79,7 @@ const AddProductForm = () => {
         }),
         {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${shopContext.token}`,
         }
       );
     } catch (error) {}

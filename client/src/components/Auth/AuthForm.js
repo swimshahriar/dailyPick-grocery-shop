@@ -79,24 +79,23 @@ const AuthForm = () => {
       setIsOpen(true);
 
       // calling login function from shop context
-      shopContext.login(response.userId, response.token);
+      shopContext.login(response.userId, response.token, response.email);
 
       setTimeout(() => {
-        //redirect to the index page
-        history.push('/');
+        if (response.email !== 'admin@dailypick.com') {
+          //redirect to the index page
+          history.push('/');
+        }
       }, 1700);
+    } else {
+      setIsOpen(false);
     }
   };
 
   return (
     <div className={classes.authFormContainer}>
       {isLoading && <BackdropLoader isLoading={isLoading} />}
-      <SnackbarComp
-        severity="success"
-        message="Operation Success!"
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-      />
+
       <form autoComplete="off" onSubmit={authSubmitHandler}>
         <Card>
           <CardContent className={classes.inputFieldContainer}>
@@ -174,6 +173,12 @@ const AuthForm = () => {
           </CardActions>
         </Card>
       </form>
+      <SnackbarComp
+        severity="success"
+        message="Operation Success!"
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
     </div>
   );
 };

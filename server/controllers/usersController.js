@@ -83,6 +83,8 @@ const registerUser = async (req, res, next) => {
   res.status(200).json({
     token,
     userId: createdUser._id,
+    // @ts-ignore
+    email: createdUser.email,
   });
 };
 
@@ -147,7 +149,10 @@ const loginUser = async (req, res, next) => {
   }
 
   // if password is correct
-  res.status(200).json({ userId: existingUser._id, token });
+  res
+    .status(200)
+    // @ts-ignore
+    .json({ userId: existingUser._id, token, email: existingUser.email });
 };
 
 // export

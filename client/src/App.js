@@ -1,4 +1,5 @@
-import React from 'react';
+// @ts-nocheck
+import React, { useContext } from 'react';
 import {
   Route,
   BrowserRouter as Router,
@@ -14,10 +15,14 @@ import ManageProduct from './pages/ManageProduct';
 import CategoryProducts from './pages/CategoryProducts';
 import Cart from './pages/Cart';
 import Auth from './pages/Auth';
+import { ShopContext } from './context/shopContext';
 
 const App = () => {
-  return (
-    <Router>
+  const { token, email } = useContext(ShopContext);
+
+  let routes;
+  if (token === null) {
+    routes = (
       <Switch>
         <Route path="/" exact>
           <Home />
@@ -25,9 +30,21 @@ const App = () => {
         <Route path="/auth" exact>
           <Auth />
         </Route>
+        <Route path="/admin" exact>
+          <Auth />
+        </Route>
         <Route path="/cart" exact>
           <Cart />
         </Route>
+        <Route path="/category/:cname">
+          <CategoryProducts />
+        </Route>
+        <Redirect to="/" />
+      </Switch>
+    );
+  } else if (token !== null && email === 'admin@dailypick.com') {
+    routes = (
+      <Switch>
         <Route path="/admin" exact>
           <AdminDashboard />
         </Route>
@@ -40,13 +57,31 @@ const App = () => {
         <Route path="/admin/products/manage/:pid">
           <ManageProduct />
         </Route>
+
+        <Redirect to="/admin" />
+      </Switch>
+    );
+  } else {
+    routes = (
+      <Switch>
+        <Route path="/" exact>
+          <Home />
+        </Route>
+        <Route path="/auth" exact>
+          <Auth />
+        </Route>
+        <Route path="/cart" exact>
+          <Cart />
+        </Route>
         <Route path="/category/:cname">
           <CategoryProducts />
         </Route>
         <Redirect to="/" />
       </Switch>
-    </Router>
-  );
+    );
+  }
+
+  return <Router>{routes}</Router>;
 };
 
 export default App;

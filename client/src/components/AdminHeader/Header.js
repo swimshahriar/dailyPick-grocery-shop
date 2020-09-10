@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   AppBar,
   CssBaseline,
@@ -16,18 +16,20 @@ import {
   DashboardOutlined,
   ExitToAppOutlined,
 } from '@material-ui/icons';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import DrawerComp from './DrawerComp';
 import useStyles from './HeaderStyles';
 import Logo from '../../assets/Logo.svg';
+import { ShopContext } from '../../context/shopContext';
 
 const Header = (props) => {
   const { window } = props;
   const classes = useStyles();
+  const shopContext = useContext(ShopContext);
+  const history = useHistory();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const open = Boolean(anchorEl);
 
   const handleMenu = (event) => {
@@ -103,7 +105,10 @@ const Header = (props) => {
               <MenuItem onClick={handleClose}>
                 <Button
                   startIcon={<ExitToAppOutlined />}
-                  onClick={() => setIsLoggedIn(!isLoggedIn)}
+                  onClick={() => {
+                    shopContext.logout();
+                    history.push('/auth');
+                  }}
                 >
                   Logout
                 </Button>

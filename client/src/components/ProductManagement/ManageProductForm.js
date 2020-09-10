@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   TextField,
   Card,
@@ -19,10 +19,13 @@ import { useHttpClient } from '../../hooks/useHttpClient';
 import BackdropLoader from '../BackdropLoader/BackdropLoader';
 import SnackbarComp from '../Snackbar/SnackbarComp';
 import ModalComp from '../Modal/ModalComp';
+import { ShopContext } from '../../context/shopContext';
 
 const ManageProductForm = ({ loadedProduct }) => {
   const history = useHistory();
   const classes = useStyles();
+  const shopContext = useContext(ShopContext);
+
   const [category, setCategory] = useState(loadedProduct.category || '');
   const [title, setTitle] = useState(loadedProduct.title || '');
   const [description, setDescription] = useState(
@@ -95,6 +98,7 @@ const ManageProductForm = ({ loadedProduct }) => {
         }),
         {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${shopContext.token}`,
         }
       );
     } catch (error) {}
@@ -127,7 +131,12 @@ const ManageProductForm = ({ loadedProduct }) => {
     try {
       await sendRequest(
         `http://localhost:8000/api/product/delete/${loadedProduct._id}`,
-        'DELETE'
+        'DELETE',
+        {},
+        {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${shopContext.token}`,
+        }
       );
       if (!error) {
         setCategory('');

@@ -1,4 +1,5 @@
-import React, { createContext, useReducer } from 'react';
+// @ts-nocheck
+import React, { createContext, useReducer, useEffect } from 'react';
 import {
   cartReducer,
   AddItemToCart,
@@ -11,7 +12,8 @@ import { authReducer, Login, Logout } from './authReducers';
 export const ShopContext = createContext({
   token: null,
   userId: null,
-  login: (userId, token) => {},
+  email: null,
+  login: (userId, token, email) => {},
   logout: (state) => {},
   cart: [],
   totalPrice: 0,
@@ -26,47 +28,49 @@ const ShopContextProvider = (props) => {
   const [authState, dispatchAuth] = useReducer(authReducer, {
     token: null,
     userId: null,
+    email: null,
   });
 
   // login
-  const login = (userId, token) => {
-    // @ts-ignore
-    dispatchAuth({ type: Login, userId, token });
+  const login = (userId, token, email) => {
+    dispatchAuth({ type: Login, userId, token, email });
   };
 
   // logout
   const logout = (authState) => {
-    // @ts-ignore
     dispatchAuth({ type: Logout });
   };
 
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    if (userData) {
+      const { userId, token, email } = userData;
+      login(userId, token, email);
+    }
+  }, []);
+
   const addItemToCart = (product) => {
-    // @ts-ignore
     dispatch({ type: AddItemToCart, product });
   };
 
   const reduceItemQtyFromCart = (productId) => {
-    // @ts-ignore
     dispatch({ type: ReduceItemQtyFromCart, productId });
   };
 
   const removeItemFromCart = (productId) => {
-    // @ts-ignore
     dispatch({ type: RemoveItemFromCart, productId });
   };
 
   const clearCart = () => {
-    // @ts-ignore
     dispatch({ type: ClearCart });
   };
 
   return (
     <ShopContext.Provider
       value={{
-        // @ts-ignore
         token: authState.token,
-        // @ts-ignore
         userId: authState.userId,
+        email: authState.email,
         login,
         logout,
         cart: state.cart,
