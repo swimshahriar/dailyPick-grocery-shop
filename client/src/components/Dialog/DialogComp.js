@@ -20,7 +20,7 @@ import BackdropLoader from '../BackdropLoader/BackdropLoader';
 import useStyles from './DialogCompStyles';
 import { ShopContext } from '../../context/shopContext';
 
-function SimpleDialog(props) {
+export function SimpleDialog(props) {
   const classes = useStyles();
   const history = useHistory();
   const shopContext = useContext(ShopContext);
@@ -155,7 +155,7 @@ SimpleDialog.propTypes = {
   open: PropTypes.bool.isRequired,
 };
 
-export default function SimpleDialogDemo({ open, setOpen, product }) {
+export default function DialogComp({ open, setOpen, product }) {
   const { sendRequest, isLoading, error } = useHttpClient();
   const [loadedRating, setLoadedRating] = useState({
     ratingReview: [],
