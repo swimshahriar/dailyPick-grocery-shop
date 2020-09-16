@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Rating Reviews Controller
  * @module ratingReviewsController
@@ -6,6 +7,7 @@
 const { validationResult } = require('express-validator');
 
 const RatingReview = require('../models/ratingReviewsModel');
+const User = require('../models/usersModel');
 
 /**
  * get rating reviews
@@ -29,7 +31,12 @@ const getRatingReview = async (req, res, next) => {
     res.json('No ratings or reviews');
   }
 
-  res.json(ratingReview);
+  // calculating rating
+  let totalRating = 0;
+  ratingReview.map((item) => (totalRating += item.rating));
+  const rating = totalRating / ratingReview.length;
+
+  res.json({ ratingReview: [...ratingReview], ratingPoint: rating.toFixed(2) });
 };
 
 /**
@@ -40,11 +47,21 @@ const getRatingReview = async (req, res, next) => {
  * @param {*} next - Go to the next line
  */
 const addRatingReview = async (req, res, next) => {
-  const { rating, review, userId, productId } = req.body;
+  const productId = req.params.pid;
+  const userId = req.userData.userId;
+  const { rating, review } = req.body;
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.json({ error: errors.array() });
+  }
+
+  let userInfo;
+  try {
+    userInfo = await User.findOne({ _id: userId });
+  } catch (error) {
+    const err = new Error('User not found!');
+    return next(err);
   }
 
   // creating rating/review
@@ -52,6 +69,7 @@ const addRatingReview = async (req, res, next) => {
     rating,
     review,
     userId,
+    userName: userInfo.fName + ' ' + userInfo.lName,
     productId,
   });
 
@@ -74,12 +92,11 @@ const addRatingReview = async (req, res, next) => {
  * @param {*} next - Go to the next line
  */
 const deleteRatingReview = async (req, res, next) => {
-  const { rid } = req.params;
-  const { userId } = req.body;
+  const { rid, uid } = req.params;
 
   let isUserGaveRating;
   try {
-    isUserGaveRating = await RatingReview.findOne({ _id: rid, userId });
+    isUserGaveRating = await RatingReview.findOne({ _id: rid, userId: uid });
   } catch (error) {
     const err = new Error(error.message);
     return next(err);

@@ -17,6 +17,7 @@ const ratingReviewsModel = new mongoose.Schema({
   rating: { type: Number, required: true },
   review: { type: String },
   userId: { type: mongoose.Types.ObjectId, required: true },
+  userName: { type: String, required: true },
   productId: { type: mongoose.Types.ObjectId, required: true },
 });
 

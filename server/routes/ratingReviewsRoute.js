@@ -9,10 +9,15 @@ const router = express.Router();
 
 // ratingReviewsController import
 const ratingReviewsController = require('../controllers/ratingReviewsController');
+const checkAuth = require('../middlewares/checkAuth');
 
 router.get('/:pid', ratingReviewsController.getRatingReview);
-router.post('/', ratingReviewsController.addRatingReview);
-router.delete('/:pid', ratingReviewsController.deleteRatingReview);
+
+// checking for authentication
+router.use(checkAuth);
+
+router.post('/:pid', ratingReviewsController.addRatingReview);
+router.delete('/:uid/:rid', ratingReviewsController.deleteRatingReview);
 
 // exporting module
 module.exports = router;
