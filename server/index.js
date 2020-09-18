@@ -13,6 +13,7 @@ const logger = require('morgan');
 const productRoute = require('./routes/productsRoute');
 const usersRoute = require('./routes/usersRoute');
 const ratingReviewsRoute = require('./routes/ratingReviewsRoute');
+const ordersRoute = require('./routes/ordersRoute');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use('/api/product', productRoute);
 app.use('/api/user', usersRoute);
 app.use('/api/rating-review', ratingReviewsRoute);
+app.use('/api/order', ordersRoute);
 
 // Error handler
 app.use((error, req, res, next) => {
