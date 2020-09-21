@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import {
   Table,
   TableBody,
@@ -25,18 +25,9 @@ import { ShopContext } from '../../context/shopContext';
 import useStyles from './CartTableStyles';
 
 const CartTable = () => {
-  const [deliveryCharge, setDeliveryCharge] = useState(15);
   const shopContext = useContext(ShopContext);
   const classes = useStyles();
   const history = useHistory();
-
-  useEffect(() => {
-    if (+shopContext.totalPrice >= 50) {
-      setDeliveryCharge(10);
-    } else {
-      setDeliveryCharge(15);
-    }
-  }, [shopContext.totalPrice]);
 
   if (shopContext.cart.length <= 0) {
     return (
@@ -105,25 +96,23 @@ const CartTable = () => {
             <TableRow>
               <TableCell rowSpan={3} />
               <TableCell colSpan={2}>Subtotal</TableCell>
-              <TableCell align="right">${shopContext.totalPrice}</TableCell>
+              <TableCell align="right">${shopContext.subTotal}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell colSpan={2}>
                 Delivery Charge{' '}
-                {shopContext.totalPrice < 50 && (
+                {shopContext.subTotal < 50 && (
                   <Typography color="primary">
-                    add ${(50 - shopContext.totalPrice).toFixed(2)} to save $5
+                    add ${(50 - shopContext.subTotal).toFixed(2)} to save $5
                   </Typography>
                 )}
               </TableCell>
 
-              <TableCell align="right">${deliveryCharge.toFixed(2)}</TableCell>
+              <TableCell align="right">${shopContext.deliveryCharge}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell colSpan={2}>Total</TableCell>
-              <TableCell align="right">
-                ${(deliveryCharge + shopContext.totalPrice).toFixed(2)}
-              </TableCell>
+              <TableCell align="right">${shopContext.total}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -151,6 +140,11 @@ const CartTable = () => {
             color="primary"
             variant="contained"
             className={classes.nextBtn}
+            onClick={() =>
+              shopContext.token
+                ? history.push('/checkout')
+                : history.push('/auth')
+            }
           >
             Next
           </Button>

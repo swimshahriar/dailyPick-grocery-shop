@@ -4,9 +4,11 @@
  */
 
 const mongoose = require('mongoose');
+const { nanoid } = require('nanoid');
 
 /**
  * @constructor orderSchema
+ * @property {String} _id - unique order id
  * @property {Array} items - list of items
  * @property {Number} subTotal - sub total price of the items
  * @property {Number} deliveryCharge - delivery charge
@@ -21,6 +23,10 @@ const mongoose = require('mongoose');
  * @property {Date} orderDate - order placed time
  */
 const orderSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    default: () => nanoid(8),
+  },
   items: { type: Array, required: true },
   subTotal: { type: Number, required: true },
   deliveryCharge: { type: Number, required: true },

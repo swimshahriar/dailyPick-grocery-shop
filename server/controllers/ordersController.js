@@ -59,6 +59,8 @@ const placeOrder = async (req, res, next) => {
     userId,
     // @ts-ignore
     userName: userInfo.fName + ' ' + userInfo.lName,
+    // @ts-ignore
+    email: userInfo.email,
     payment: {
       paymentMethod,
     },

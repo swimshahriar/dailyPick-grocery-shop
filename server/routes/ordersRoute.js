@@ -7,11 +7,15 @@ const express = require('express');
 const { body } = require('express-validator');
 
 const ordersController = require('../controllers/ordersController');
+const checkAuth = require('../middlewares/checkAuth');
 
 const router = express.Router();
 
 router.get('/', ordersController.getOrders);
 router.get('/:oid', ordersController.getOrderById);
+
+// checking for auth
+router.use(checkAuth);
 
 router.post(
   '/place',
@@ -28,8 +32,8 @@ router.post(
   ],
   ordersController.placeOrder
 );
-router.patch('/:oid', ordersController.updateOrderStatus);
 router.patch('/cancel/:oid', ordersController.cancelOrder);
+router.patch('/:oid', ordersController.updateOrderStatus);
 router.delete('/:oid', ordersController.deleteOrder);
 
 // export

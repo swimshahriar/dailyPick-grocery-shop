@@ -15,7 +15,9 @@ import ManageProduct from './pages/ManageProduct';
 import CategoryProducts from './pages/CategoryProducts';
 import Cart from './pages/Cart';
 import Auth from './pages/Auth';
+import Checkout from './pages/Checkout';
 import { ShopContext } from './context/shopContext';
+import UserDashboard from './pages/UserDashboard';
 
 const App = () => {
   const { token, email } = useContext(ShopContext);
@@ -72,6 +74,12 @@ const App = () => {
         </Route>
         <Route path="/cart" exact>
           <Cart />
+        </Route>
+        <Route path="/user" exact>
+          <UserDashboard />
+        </Route>
+        <Route path="/checkout" exact>
+          <Checkout />
         </Route>
         <Route path="/category/:cname">
           <CategoryProducts />
