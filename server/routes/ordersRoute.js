@@ -11,8 +11,17 @@ const checkAuth = require('../middlewares/checkAuth');
 
 const router = express.Router();
 
+/**
+ * @func router - Orders Routes
+ * @property {*} get - get property
+ * @property {*} use - use middlewares
+ * @property {*} post - post property
+ * @property {*} patch - patch property
+ * @property {*} delete - delete property
+ */
 router.get('/', ordersController.getOrders);
-router.get('/:oid', ordersController.getOrderById);
+router.get('/userId=:uid', ordersController.getOrderByUserId);
+router.get('/orderId=:oid', ordersController.getOrderById);
 
 // checking for auth
 router.use(checkAuth);

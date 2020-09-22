@@ -114,12 +114,28 @@ const getOrderById = async (req, res, next) => {
     return next(err);
   }
 
-  if (!order) {
-    const err = new Error('Order not found!');
+  res.json(order);
+};
+
+/**
+ * Get Order by User Id
+ * @function getOrderByUserId
+ * @param {*} req - Incoming requests
+ * @param {*} res - Outgoing responses
+ * @param {*} next - Go to the next line
+ */
+const getOrderByUserId = async (req, res, next) => {
+  const { uid } = req.params;
+
+  let orders;
+  try {
+    orders = await Order.find({ userId: uid }).sort({ orderDate: -1 });
+  } catch (error) {
+    const err = new Error(error.message);
     return next(err);
   }
 
-  res.json(order);
+  res.json(orders);
 };
 
 /**
@@ -184,7 +200,7 @@ const cancelOrder = async (req, res, next) => {
   }
 
   // @ts-ignore
-  order.status = 'Cancel';
+  order.status = 'Canceled';
 
   let updatedOrder;
   try {
@@ -221,6 +237,7 @@ const deleteOrder = async (req, res, next) => {
 exports.placeOrder = placeOrder;
 exports.getOrders = getOrders;
 exports.getOrderById = getOrderById;
+exports.getOrderByUserId = getOrderByUserId;
 exports.updateOrderStatus = updateOrderStatus;
 exports.cancelOrder = cancelOrder;
 exports.deleteOrder = deleteOrder;

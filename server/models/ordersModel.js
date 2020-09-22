@@ -38,14 +38,14 @@ const orderSchema = new mongoose.Schema({
   email: { type: String, required: true },
   deliveryTime: {
     time: { type: String, required: true },
-    date: { type: Date, required: true },
+    date: { type: String, required: true },
   },
   payment: {
     paymentMethod: { type: String, required: true },
     paid: { type: Boolean, default: false },
   },
   status: { type: String, default: 'Pending' },
-  orderDate: { type: Date, required: true },
+  orderDate: { type: String, required: true },
 });
 
 // export

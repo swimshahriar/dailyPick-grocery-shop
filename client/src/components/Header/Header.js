@@ -124,7 +124,12 @@ const Header = (props) => {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>
-                <Button startIcon={<DashboardOutlined />}>DashBoard</Button>
+                <Button
+                  startIcon={<DashboardOutlined />}
+                  onClick={() => history.push('/user/dashboard')}
+                >
+                  DashBoard
+                </Button>
               </MenuItem>
               <MenuItem onClick={handleClose}>
                 <Button

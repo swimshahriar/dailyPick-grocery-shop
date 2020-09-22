@@ -30,7 +30,7 @@ const CheckoutForm = () => {
   const { sendRequest, isLoading, error } = useHttpClient();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [address, setAddress] = useState('');
-  const [date, setDate] = useState(new Date().toLocaleDateString());
+  const [date, setDate] = useState(`${new Date().toLocaleDateString()}`);
   const [time, setTime] = useState('9:00 - 9:59 am');
   const [paymentMethod, setPaymentMethod] = useState('Cash On Delivery');
   const [isOpen, setIsOpen] = useState(false);
@@ -61,7 +61,7 @@ const CheckoutForm = () => {
           items: shopContext.cart,
           subTotal: shopContext.subTotal,
           total: shopContext.total,
-          orderDate: new Date().toLocaleDateString(),
+          orderDate: `${new Date().toLocaleDateString()}`,
         }),
         {
           'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ const CheckoutForm = () => {
       setIsOpen(true);
       setPhoneNumber('');
       setAddress('');
-      setDate(new Date().toLocaleDateString());
+      setDate(`${new Date().toLocaleDateString()}`);
       setTime('9:00 - 9:59 am');
       setPaymentMethod('Cash On Delivery');
 
@@ -83,7 +83,7 @@ const CheckoutForm = () => {
 
       setTimeout(() => {
         setIsOpen(false);
-        history.push('/');
+        history.push('/user/dashboard');
       }, 1700);
     }
   };
@@ -135,8 +135,8 @@ const CheckoutForm = () => {
                 onChange={(e) => setDate(e.target.value)}
               >
                 {dateList.map((item, index) => (
-                  <MenuItem key={index} value={item}>
-                    {item}
+                  <MenuItem key={index} value={`${item}`}>
+                    {`${item}`}
                   </MenuItem>
                 ))}
               </Select>
