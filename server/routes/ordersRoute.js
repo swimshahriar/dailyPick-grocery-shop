@@ -42,7 +42,7 @@ router.post(
   ordersController.placeOrder
 );
 router.patch('/cancel/:oid', ordersController.cancelOrder);
-router.patch('/:oid', ordersController.updateOrderStatus);
+router.patch('/changeStatus/:oid', ordersController.updateOrderStatus);
 router.delete('/:oid', ordersController.deleteOrder);
 
 // export

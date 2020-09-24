@@ -9,10 +9,15 @@ import {
   Grow,
   Button,
   CardActions,
+  FormControl,
+  MenuItem,
+  Select,
+  InputLabel,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Header from '../components/Header/Header';
+import AdminHeader from '../components/AdminHeader/Header';
 import { useHttpClient } from '../hooks/useHttpClient';
 import BackdropLoader from '../components/BackdropLoader/BackdropLoader';
 import { ShopContext } from '../context/shopContext';
@@ -31,9 +36,13 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     margin: 5,
   },
+  inputField: {
+    margin: theme.spacing(2),
+    width: '80%',
+  },
 }));
 
-const UserOrderDetails = () => {
+const OrderDetails = ({ isAdmin }) => {
   const { oid } = useParams();
   const history = useHistory();
   const classes = useStyles();
@@ -54,6 +63,7 @@ const UserOrderDetails = () => {
     },
     address: '',
   });
+  const [orderStatus, setOrderStatus] = useState('');
 
   useEffect(() => {
     let loadedOrderDetails;
@@ -63,6 +73,7 @@ const UserOrderDetails = () => {
           `http://localhost:8000/api/order/orderId=${oid}`
         );
         setLoadedOrder(loadedOrderDetails);
+        setOrderStatus(loadedOrderDetails.status);
       };
       sendReq();
     } catch (error) {}
@@ -86,14 +97,39 @@ const UserOrderDetails = () => {
     } catch (error) {}
   };
 
+  // handle order status change
+  const changeOrderStatusHandler = async () => {
+    try {
+      await sendRequest(
+        `http://localhost:8000/api/order/changeStatus/${oid}`,
+        'PATCH',
+        JSON.stringify({
+          status: orderStatus,
+        }),
+        {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${shopContext.token}`,
+        }
+      );
+    } catch (error) {}
+    if (error === null) {
+      history.push(`/admin/order/${oid}`);
+    }
+  };
+
   return (
     <>
-      <Header />
+      {isAdmin ? <AdminHeader /> : <Header />}
       <BackdropLoader isLoading={isLoading} />
       <main className={classes.card}>
         {loadedOrder !== {} && (
           <Grow in timeout={500}>
             <Card>
+              {error && (
+                <Typography component="p" color="error" align="center">
+                  {error}
+                </Typography>
+              )}
               <CardContent>
                 <div className={classes.flex}>
                   <Typography variant="h6">Order #{loadedOrder._id}</Typography>
@@ -163,7 +199,7 @@ const UserOrderDetails = () => {
                   <Typography variant="body1">${loadedOrder.total}</Typography>
                 </div>
               </CardContent>
-              {loadedOrder.status === 'Pending' && (
+              {loadedOrder.status === 'Pending' && !isAdmin && (
                 <CardActions>
                   <Button
                     variant="outlined"
@@ -175,6 +211,37 @@ const UserOrderDetails = () => {
                   </Button>
                 </CardActions>
               )}
+              {isAdmin && (
+                <>
+                  <FormControl variant="filled" className={classes.inputField}>
+                    <InputLabel id="orderStatus">Order Status</InputLabel>
+                    <Select
+                      required
+                      labelId="orderStatus"
+                      id="orderStatus"
+                      value={orderStatus}
+                      onChange={(e) => setOrderStatus(e.target.value)}
+                    >
+                      <MenuItem value={'Pending'}>Pending</MenuItem>
+                      <MenuItem value={'Confirmed'}>Confirmed</MenuItem>
+                      <MenuItem value={'Processing'}>Processing</MenuItem>
+                      <MenuItem value={'Delivered'}>Delivered</MenuItem>
+                      <MenuItem value={'Canceled'}>Canceled</MenuItem>
+                    </Select>
+                  </FormControl>
+
+                  <CardActions>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      fullWidth
+                      onClick={changeOrderStatusHandler}
+                    >
+                      Change Order Status
+                    </Button>
+                  </CardActions>
+                </>
+              )}
             </Card>
           </Grow>
         )}
@@ -183,4 +250,4 @@ const UserOrderDetails = () => {
   );
 };
 
-export default UserOrderDetails;
+export default OrderDetails;

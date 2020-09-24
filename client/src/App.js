@@ -18,7 +18,8 @@ import Auth from './pages/Auth';
 import Checkout from './pages/Checkout';
 import { ShopContext } from './context/shopContext';
 import UserDashboard from './pages/UserDashboard';
-import UserOrderDetails from './pages/UserOrderDetails';
+import OrderDetails from './pages/OrderDetails';
+import AdminOrders from './pages/AdminOrders';
 
 const App = () => {
   const { token, email } = useContext(ShopContext);
@@ -54,6 +55,12 @@ const App = () => {
         <Route path="/admin/products" exact>
           <AdminProducts />
         </Route>
+        <Route path="/admin/orders" exact>
+          <AdminOrders />
+        </Route>
+        <Route path="/admin/order/:oid" exact>
+          <OrderDetails isAdmin={true} />
+        </Route>
         <Route path="/admin/products/add" exact>
           <AddProduct />
         </Route>
@@ -80,7 +87,7 @@ const App = () => {
           <UserDashboard />
         </Route>
         <Route path="/order/:oid" exact>
-          <UserOrderDetails />
+          <OrderDetails isAdmin={false} />
         </Route>
         <Route path="/checkout" exact>
           <Checkout />

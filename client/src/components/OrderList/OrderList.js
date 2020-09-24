@@ -11,7 +11,7 @@ import { useHistory } from 'react-router-dom';
 
 import useStyles from './OrderListStyles';
 
-const OrderList = ({ loadedOrders }) => {
+const OrderList = ({ loadedOrders, isAdmin }) => {
   const history = useHistory();
   const classes = useStyles();
 
@@ -28,7 +28,11 @@ const OrderList = ({ loadedOrders }) => {
             <Grid item xs={12} sm={6} md={4} key={order._id}>
               <Card
                 className={classes.card}
-                onClick={() => history.push(`/order/${order._id}`)}
+                onClick={() =>
+                  !isAdmin
+                    ? history.push(`/order/${order._id}`)
+                    : history.push(`/admin/order/${order._id}`)
+                }
               >
                 <CardContent>
                   <div className={classes.flex}>
