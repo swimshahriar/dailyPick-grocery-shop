@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: routes/productsRoute.js</title>
+    <title>JSDoc: Source: routes/usersRoute.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: routes/productsRoute.js</h1>
+    <h1 class="page-title">Source: routes/usersRoute.js</h1>
 
     
 
@@ -27,59 +27,33 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Products Route Module
- * @module productsRoute
+ * Users Route
+ * @module usersRoute
  */
-
 const express = require('express');
-const { body } = require('express-validator');
 const router = express.Router();
+const { body } = require('express-validator');
 
-const productsController = require('../controllers/productsController');
-const checkAuth = require('../middlewares/checkAuth');
-
-/**
- * @func router - Products Routes
- * @property {*} get - get property
- * @property {*} use - use middlewares
- * @property {*} post - post property
- * @property {*} patch - patch property
- * @property {*} delete - delete property
- */
-router.get('/archive/all', productsController.getProductByArchive);
-router.get('/offer', productsController.getProductByOffer);
-router.get('/', productsController.getProducts);
-router.get('/:pid', productsController.getProductById);
-router.get('/category/:cname', productsController.getProductByCategory);
-router.get('/search/:cname/q=:text', productsController.getProductBySearchText);
-
-// checking for authorization
-router.use(checkAuth);
+// usersController import
+const usersController = require('../controllers/usersController');
 
 router.post(
-  '/add',
-  body('title').not().isEmpty(),
-  body('imageUrl').isURL(),
-  body('description').isLength({ min: 10 }),
-  body('category').not().isEmpty(),
-  body('price').not().isEmpty().isNumeric(),
-  body('unitQty').not().isEmpty(),
-  productsController.addProduct
+  '/register',
+  [
+    body('fName').not().isEmpty(),
+    body('lName').not().isEmpty(),
+    body('email').isEmail(),
+    body('password').isLength({ min: 6 }),
+  ],
+  usersController.registerUser
 );
-router.patch(
-  '/update/:pid',
-  body('title').not().isEmpty(),
-  body('imageUrl').isURL(),
-  body('description').isLength({ min: 10 }),
-  body('category').not().isEmpty(),
-  body('price').not().isEmpty().isNumeric(),
-  body('unitQty').not().isEmpty(),
-  body('isArchive').not().isEmpty(),
-  productsController.updateProduct
+router.post(
+  '/login',
+  [body('email').isEmail(), body('password').isLength({ min: 6 })],
+  usersController.loginUser
 );
-router.delete('/delete/:pid', productsController.deleteProduct);
 
-// Export Routes
+// route export
 module.exports = router;
 </code></pre>
         </article>

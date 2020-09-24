@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: routes/productsRoute.js</title>
+    <title>JSDoc: Source: models/ordersModel.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: routes/productsRoute.js</h1>
+    <h1 class="page-title">Source: models/ordersModel.js</h1>
 
     
 
@@ -27,60 +27,57 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Products Route Module
- * @module productsRoute
+ * Orders Model
+ * @module ordersModel
  */
 
-const express = require('express');
-const { body } = require('express-validator');
-const router = express.Router();
-
-const productsController = require('../controllers/productsController');
-const checkAuth = require('../middlewares/checkAuth');
+const mongoose = require('mongoose');
+const { nanoid } = require('nanoid');
 
 /**
- * @func router - Products Routes
- * @property {*} get - get property
- * @property {*} use - use middlewares
- * @property {*} post - post property
- * @property {*} patch - patch property
- * @property {*} delete - delete property
+ * @constructor orderSchema
+ * @property {String} _id - unique order id
+ * @property {Array} items - list of items
+ * @property {Number} subTotal - sub total price of the items
+ * @property {Number} deliveryCharge - delivery charge
+ * @property {Number} total - total price after adding delivery charge
+ * @property {String} userId - id of the user
+ * @property {String} address - address of the delivery
+ * @property {String} phoneNumber - phone number of the user
+ * @property {String} email - email of the user
+ * @property {Object} deliveryTime - contains the delivery time and date
+ * @property {Object} payment - contains payment method and paid status
+ * @property {String} status - order process status
+ * @property {Date} orderDate - order placed time
  */
-router.get('/archive/all', productsController.getProductByArchive);
-router.get('/offer', productsController.getProductByOffer);
-router.get('/', productsController.getProducts);
-router.get('/:pid', productsController.getProductById);
-router.get('/category/:cname', productsController.getProductByCategory);
-router.get('/search/:cname/q=:text', productsController.getProductBySearchText);
+const orderSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    default: () => nanoid(8),
+  },
+  items: { type: Array, required: true },
+  subTotal: { type: Number, required: true },
+  deliveryCharge: { type: Number, required: true },
+  total: { type: Number, required: true },
+  userId: { type: mongoose.Types.ObjectId, required: true },
+  userName: { type: String, required: true },
+  address: { type: String, required: true },
+  phoneNumber: { type: String, required: true },
+  email: { type: String, required: true },
+  deliveryTime: {
+    time: { type: String, required: true },
+    date: { type: String, required: true },
+  },
+  payment: {
+    paymentMethod: { type: String, required: true },
+    paid: { type: Boolean, default: false },
+  },
+  status: { type: String, default: 'Pending' },
+  orderDate: { type: String, required: true },
+});
 
-// checking for authorization
-router.use(checkAuth);
-
-router.post(
-  '/add',
-  body('title').not().isEmpty(),
-  body('imageUrl').isURL(),
-  body('description').isLength({ min: 10 }),
-  body('category').not().isEmpty(),
-  body('price').not().isEmpty().isNumeric(),
-  body('unitQty').not().isEmpty(),
-  productsController.addProduct
-);
-router.patch(
-  '/update/:pid',
-  body('title').not().isEmpty(),
-  body('imageUrl').isURL(),
-  body('description').isLength({ min: 10 }),
-  body('category').not().isEmpty(),
-  body('price').not().isEmpty().isNumeric(),
-  body('unitQty').not().isEmpty(),
-  body('isArchive').not().isEmpty(),
-  productsController.updateProduct
-);
-router.delete('/delete/:pid', productsController.deleteProduct);
-
-// Export Routes
-module.exports = router;
+// export
+module.exports = mongoose.model('Order', orderSchema);
 </code></pre>
         </article>
     </section>

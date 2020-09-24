@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: routes/productsRoute.js</title>
+    <title>JSDoc: Source: models/usersModel.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: routes/productsRoute.js</h1>
+    <h1 class="page-title">Source: models/usersModel.js</h1>
 
     
 
@@ -27,60 +27,32 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Products Route Module
- * @module productsRoute
+ * User Schema
+ * @module usersModel
  */
 
-const express = require('express');
-const { body } = require('express-validator');
-const router = express.Router();
-
-const productsController = require('../controllers/productsController');
-const checkAuth = require('../middlewares/checkAuth');
+const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 
 /**
- * @func router - Products Routes
- * @property {*} get - get property
- * @property {*} use - use middlewares
- * @property {*} post - post property
- * @property {*} patch - patch property
- * @property {*} delete - delete property
+ * @constructor userSchema
+ * @property {String} fName - first name of the user
+ * @property {String} lName - last name of the user
+ * @property {String} email - email of the product
+ * @property {String} password - password of the user
  */
-router.get('/archive/all', productsController.getProductByArchive);
-router.get('/offer', productsController.getProductByOffer);
-router.get('/', productsController.getProducts);
-router.get('/:pid', productsController.getProductById);
-router.get('/category/:cname', productsController.getProductByCategory);
-router.get('/search/:cname/q=:text', productsController.getProductBySearchText);
+const userSchema = new mongoose.Schema({
+  fName: { type: String, required: true },
+  lName: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true, minlength: 6 },
+});
 
-// checking for authorization
-router.use(checkAuth);
+// plugin
+userSchema.plugin(uniqueValidator);
 
-router.post(
-  '/add',
-  body('title').not().isEmpty(),
-  body('imageUrl').isURL(),
-  body('description').isLength({ min: 10 }),
-  body('category').not().isEmpty(),
-  body('price').not().isEmpty().isNumeric(),
-  body('unitQty').not().isEmpty(),
-  productsController.addProduct
-);
-router.patch(
-  '/update/:pid',
-  body('title').not().isEmpty(),
-  body('imageUrl').isURL(),
-  body('description').isLength({ min: 10 }),
-  body('category').not().isEmpty(),
-  body('price').not().isEmpty().isNumeric(),
-  body('unitQty').not().isEmpty(),
-  body('isArchive').not().isEmpty(),
-  productsController.updateProduct
-);
-router.delete('/delete/:pid', productsController.deleteProduct);
-
-// Export Routes
-module.exports = router;
+// userSchema export
+module.exports = mongoose.model('User', userSchema);
 </code></pre>
         </article>
     </section>

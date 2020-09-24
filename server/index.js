@@ -1,6 +1,6 @@
 /**
  * @file index.js is the root file of this doc
- * @author S. M. Shahriar
+ * @author S. M. Shahriar, Abu Saleh Akash, Tarik Ahmed
  */
 
 const express = require('express');
