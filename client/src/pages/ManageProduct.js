@@ -16,7 +16,7 @@ const ManageProduct = () => {
     const sendReq = async () => {
       try {
         const response = await sendRequest(
-          `http://localhost:8000/api/product/${pid}`
+          `https://dailypick.herokuapp.com/api/product/${pid}`
         );
         setLoadedProduct(response);
       } catch (error) {}

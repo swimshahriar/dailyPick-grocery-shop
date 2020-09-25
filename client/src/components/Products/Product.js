@@ -30,7 +30,7 @@ const Product = ({ product }) => {
     const sendReq = async () => {
       try {
         const { ratingPoint } = await sendRequest(
-          `http://localhost:8000/api/rating-review/${product._id}`
+          `https://dailypick.herokuapp.com/api/rating-review/${product._id}`
         );
         if (+ratingPoint) {
           setRatingPoint(+ratingPoint);

@@ -35,7 +35,7 @@ const Home = () => {
     try {
       const sendReq = async () => {
         const responseData = await sendRequest(
-          'http://localhost:8000/api/product/offer'
+          'https://dailypick.herokuapp.com/api/product/offer'
         );
 
         setLoadedProducts(responseData);

@@ -70,7 +70,7 @@ const OrderDetails = ({ isAdmin }) => {
     try {
       const sendReq = async () => {
         loadedOrderDetails = await sendRequest(
-          `http://localhost:8000/api/order/orderId=${oid}`
+          `https://dailypick.herokuapp.com/api/order/orderId=${oid}`
         );
         setLoadedOrder(loadedOrderDetails);
         setOrderStatus(loadedOrderDetails.status);
@@ -83,7 +83,7 @@ const OrderDetails = ({ isAdmin }) => {
   const handleCancel = async () => {
     try {
       await sendRequest(
-        `http://localhost:8000/api/order/cancel/${oid}`,
+        `https://dailypick.herokuapp.com/api/order/cancel/${oid}`,
         'PATCH',
         {},
         {
@@ -101,7 +101,7 @@ const OrderDetails = ({ isAdmin }) => {
   const changeOrderStatusHandler = async () => {
     try {
       await sendRequest(
-        `http://localhost:8000/api/order/changeStatus/${oid}`,
+        `https://dailypick.herokuapp.com/api/order/changeStatus/${oid}`,
         'PATCH',
         JSON.stringify({
           status: orderStatus,

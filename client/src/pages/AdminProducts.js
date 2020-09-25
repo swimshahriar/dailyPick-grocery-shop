@@ -76,7 +76,7 @@ const AdminProducts = () => {
     if (searchText !== '') {
       try {
         responseData = await fetch(
-          `http://localhost:8000/api/product/search/${cname}/q=${searchText}`
+          `https://dailypick.herokuapp.com/api/product/search/${cname}/q=${searchText}`
         );
       } catch (error) {
         throw Error(error.message);
@@ -93,15 +93,15 @@ const AdminProducts = () => {
       const sendReq = async () => {
         if (category === '') {
           responseData = await sendRequest(
-            'http://localhost:8000/api/product/'
+            'https://dailypick.herokuapp.com/api/product/'
           );
         } else if (category === 'Archived') {
           responseData = await sendRequest(
-            'http://localhost:8000/api/product/archive/all'
+            'https://dailypick.herokuapp.com/api/product/archive/all'
           );
         } else {
           responseData = await sendRequest(
-            `http://localhost:8000/api/product/category/${category}`
+            `https://dailypick.herokuapp.com/api/product/category/${category}`
           );
         }
 

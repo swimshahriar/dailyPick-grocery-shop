@@ -170,7 +170,7 @@ export default function DialogComp({ open, setOpen, product }) {
     try {
       const sendReq = async () => {
         const response = await sendRequest(
-          `http://localhost:8000/api/rating-review/${product._id}`
+          `https://dailypick.herokuapp.com/api/rating-review/${product._id}`
         );
         setLoadedRating(response);
       };
@@ -196,7 +196,7 @@ export default function DialogComp({ open, setOpen, product }) {
   const ratingSubmitHandler = async () => {
     try {
       await sendRequest(
-        `http://localhost:8000/api/rating-review/${product._id}`,
+        `https://dailypick.herokuapp.com/api/rating-review/${product._id}`,
         'POST',
         JSON.stringify({
           rating,
@@ -220,7 +220,7 @@ export default function DialogComp({ open, setOpen, product }) {
   const deleteRating = async (rid) => {
     try {
       await sendRequest(
-        `http://localhost:8000/api/rating-review/${shopContext.userId}/${rid}`,
+        `https://dailypick.herokuapp.com/api/rating-review/${shopContext.userId}/${rid}`,
         'DELETE',
         {},
         {

@@ -39,7 +39,7 @@ const AuthForm = () => {
     if (!isLoginMode) {
       try {
         response = await sendRequest(
-          'http://localhost:8000/api/user/register',
+          'https://dailypick.herokuapp.com/api/user/register',
           'POST',
           JSON.stringify({
             fName,
@@ -55,7 +55,7 @@ const AuthForm = () => {
     } else {
       try {
         response = await sendRequest(
-          'http://localhost:8000/api/user/login',
+          'https://dailypick.herokuapp.com/api/user/login',
           'POST',
           JSON.stringify({
             email,

@@ -67,7 +67,7 @@ const AddProductForm = () => {
 
     try {
       await sendRequest(
-        'http://localhost:8000/api/product/add',
+        'https://dailypick.herokuapp.com/api/product/add',
         'POST',
         JSON.stringify({
           title,

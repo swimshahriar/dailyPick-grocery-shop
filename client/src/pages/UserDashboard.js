@@ -63,7 +63,7 @@ const UserDashboard = () => {
     try {
       const sendReq = async () => {
         orders = await sendRequest(
-          `http://localhost:8000/api/order/userId=${shopContext.userId}`
+          `https://dailypick.herokuapp.com/api/order/userId=${shopContext.userId}`
         );
 
         setLoadedOrders(orders);

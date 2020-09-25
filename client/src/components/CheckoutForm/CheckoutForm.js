@@ -49,7 +49,7 @@ const CheckoutForm = () => {
 
     try {
       await sendRequest(
-        'http://localhost:8000/api/order/place',
+        'https://dailypick.herokuapp.com/api/order/place',
         'POST',
         JSON.stringify({
           phoneNumber,

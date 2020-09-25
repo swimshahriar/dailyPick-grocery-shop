@@ -84,7 +84,7 @@ const ManageProductForm = ({ loadedProduct }) => {
 
     try {
       await sendRequest(
-        `http://localhost:8000/api/product/update/${loadedProduct._id}`,
+        `https://dailypick.herokuapp.com/api/product/update/${loadedProduct._id}`,
         'PATCH',
         JSON.stringify({
           title,
@@ -130,7 +130,7 @@ const ManageProductForm = ({ loadedProduct }) => {
 
     try {
       await sendRequest(
-        `http://localhost:8000/api/product/delete/${loadedProduct._id}`,
+        `https://dailypick.herokuapp.com/api/product/delete/${loadedProduct._id}`,
         'DELETE',
         {},
         {

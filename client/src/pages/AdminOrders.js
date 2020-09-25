@@ -62,7 +62,7 @@ const AdminOrders = () => {
     let orders;
     try {
       const sendReq = async () => {
-        orders = await sendRequest(`http://localhost:8000/api/order/`);
+        orders = await sendRequest(`https://dailypick.herokuapp.com/api/order/`);
 
         setLoadedOrders(orders);
       };
