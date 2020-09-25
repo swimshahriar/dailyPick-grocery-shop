@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const logger = require('morgan');
+require('dotenv').config();
 
 // Routes Import
 const productRoute = require('./routes/productsRoute');
@@ -51,14 +52,14 @@ app.use((error, req, res, next) => {
 
 // MongoDB connection and Server startup
 mongoose
-  .connect('mongodb://localhost/dailypick', {
+  .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
   })
   .then(() => {
     console.log('db connected!');
-    app.listen('8000' || process.env.PORT, () =>
+    app.listen(process.env.PORT || '8000', () =>
       console.log('server started!')
     );
   })
