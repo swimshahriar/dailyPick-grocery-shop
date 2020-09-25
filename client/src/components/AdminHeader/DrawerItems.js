@@ -13,6 +13,7 @@ import {
   ExitToAppOutlined,
   DashboardOutlined,
   ShoppingBasketOutlined,
+  ReceiptOutlined,
 } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 
@@ -46,6 +47,11 @@ const category = [
     name: 'Products',
     icon: <ShoppingBasketOutlined />,
     url: '/admin/products',
+  },
+  {
+    name: 'Orders',
+    icon: <ReceiptOutlined />,
+    url: '/admin/orders',
   },
 ];
 

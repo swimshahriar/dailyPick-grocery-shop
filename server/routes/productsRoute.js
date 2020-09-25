@@ -8,10 +8,12 @@ const { body } = require('express-validator');
 const router = express.Router();
 
 const productsController = require('../controllers/productsController');
+const checkAuth = require('../middlewares/checkAuth');
 
 /**
  * @func router - Products Routes
  * @property {*} get - get property
+ * @property {*} use - use middlewares
  * @property {*} post - post property
  * @property {*} patch - patch property
  * @property {*} delete - delete property
@@ -22,6 +24,10 @@ router.get('/', productsController.getProducts);
 router.get('/:pid', productsController.getProductById);
 router.get('/category/:cname', productsController.getProductByCategory);
 router.get('/search/:cname/q=:text', productsController.getProductBySearchText);
+
+// checking for authorization
+router.use(checkAuth);
+
 router.post(
   '/add',
   body('title').not().isEmpty(),

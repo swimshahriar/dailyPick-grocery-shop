@@ -19,6 +19,17 @@ export default makeStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  rating: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  ratingBtn: {
+    '&:hover': {
+      cursor: 'pointer',
+      color: theme.palette.primary.light,
+    },
+  },
   priceSection: {
     display: 'flex',
     flexDirection: 'column',

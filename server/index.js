@@ -1,6 +1,6 @@
 /**
  * @file index.js is the root file of this doc
- * @author S. M. Shahriar
+ * @author S. M. Shahriar, Abu Saleh Akash, Tarik Ahmed
  */
 
 const express = require('express');
@@ -11,6 +11,9 @@ const logger = require('morgan');
 
 // Routes Import
 const productRoute = require('./routes/productsRoute');
+const usersRoute = require('./routes/usersRoute');
+const ratingReviewsRoute = require('./routes/ratingReviewsRoute');
+const ordersRoute = require('./routes/ordersRoute');
 
 const app = express();
 
@@ -22,6 +25,9 @@ app.use(express.json());
 
 // Routes
 app.use('/api/product', productRoute);
+app.use('/api/user', usersRoute);
+app.use('/api/rating-review', ratingReviewsRoute);
+app.use('/api/order', ordersRoute);
 
 // Error handler
 app.use((error, req, res, next) => {

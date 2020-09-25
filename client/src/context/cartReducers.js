@@ -6,7 +6,7 @@ export const ClearCart = 'CLEAR_CART';
 
 // add item to cart
 const addItemToCart = (product, state) => {
-  let totalPrice = 0;
+  let subTotal = 0;
 
   // previous cart products and index
   const updatedCart = [...state.cart];
@@ -22,7 +22,7 @@ const addItemToCart = (product, state) => {
     } else {
       updatedCart.push({ ...product, qty: 1, total: +product.offerPrice });
     }
-    updatedCart.forEach((item) => (totalPrice += item.total));
+    updatedCart.forEach((item) => (subTotal += item.total));
   } else {
     const updatedItem = { ...updatedCart[updatedItemIndex] };
 
@@ -36,17 +36,24 @@ const addItemToCart = (product, state) => {
     }
 
     updatedCart[updatedItemIndex] = updatedItem;
-    updatedCart.forEach((item) => (totalPrice += item.total));
+    updatedCart.forEach((item) => (subTotal += item.total));
   }
 
-  totalPrice = +totalPrice.toFixed(2);
+  subTotal = +subTotal.toFixed(2);
 
-  return { ...state, cart: updatedCart, totalPrice };
+  let deliveryCharge = 15;
+  if (subTotal >= 50) {
+    deliveryCharge = 10;
+  }
+
+  const total = +(subTotal + deliveryCharge).toFixed(2);
+
+  return { ...state, cart: updatedCart, subTotal, deliveryCharge, total };
 };
 
 // reduce item qty from cart
 const reduceItemQtyFromCart = (productId, state) => {
-  let totalPrice = 0;
+  let subTotal = 0;
   // previous cart state and index of the product
   const updatedCart = [...state.cart];
   const updatedItemIndex = updatedCart.findIndex(
@@ -71,15 +78,22 @@ const reduceItemQtyFromCart = (productId, state) => {
 
     updatedCart[updatedItemIndex] = updatedItem;
   }
-  updatedCart.forEach((item) => (totalPrice += item.total));
-  totalPrice = +totalPrice.toFixed(2);
+  updatedCart.forEach((item) => (subTotal += item.total));
+  subTotal = +subTotal.toFixed(2);
 
-  return { ...state, cart: updatedCart, totalPrice: totalPrice };
+  let deliveryCharge = 15;
+  if (subTotal >= 50) {
+    deliveryCharge = 10;
+  }
+
+  const total = +(subTotal + deliveryCharge).toFixed(2);
+
+  return { ...state, cart: updatedCart, subTotal, deliveryCharge, total };
 };
 
 // remove item from cart
 const removeItemFromCart = (productId, state) => {
-  let totalPrice = 0;
+  let subTotal = 0;
   // previous cart and item index
   const updatedCart = [...state.cart];
   const updatedItemIndex = updatedCart.findIndex(
@@ -89,15 +103,22 @@ const removeItemFromCart = (productId, state) => {
   // removing item from cart
   updatedCart.splice(updatedItemIndex, 1);
 
-  updatedCart.forEach((item) => (totalPrice += item.total));
-  totalPrice = +totalPrice.toFixed(2);
+  updatedCart.forEach((item) => (subTotal += item.total));
+  subTotal = +subTotal.toFixed(2);
 
-  return { ...state, cart: updatedCart, totalPrice: totalPrice };
+  let deliveryCharge = 15;
+  if (subTotal >= 50) {
+    deliveryCharge = 10;
+  }
+
+  const total = +(subTotal + deliveryCharge).toFixed(2);
+
+  return { ...state, cart: updatedCart, subTotal, deliveryCharge, total };
 };
 
 // clear cart
 const clearCart = (state) => {
-  return { ...state, cart: [], totalPrice: 0 };
+  return { ...state, cart: [], subTotal: 0, deliveryCharge: 0, total: 0 };
 };
 
 // reducer for cart

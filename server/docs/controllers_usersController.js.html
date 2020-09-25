@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/usersController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/usersController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * User Controller Module
+ * @module usersController
+ */
+
+const { validationResult } = require('express-validator');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const User = require('../models/usersModel');
+
+/**
+ * Register an user
+ * @function registerUser
+ * @param {*} req - Incoming requests
+ * @param {*} res - Outgoing responses
+ * @param {*} next - Go to the next line
+ */
+const registerUser = async (req, res, next) => {
+  const { fName, lName, email, password } = req.body;
+  console.log(fName, lName, email, password);
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    res.json({ errors: errors.array() });
+  }
+
+  // checking, if user email already exists or not
+  let existingEmail;
+  try {
+    existingEmail = await User.findOne({ email });
+  } catch (error) {
+    const err = new Error('Registration failed!');
+    return next(err);
+  }
+
+  // if email exists, show error
+  if (existingEmail) {
+    const error = new Error('Email already exists!');
+    return next(error);
+  }
+
+  // hash user password with bcrypt
+  let hashedPassword;
+  try {
+    hashedPassword = await bcrypt.hash(password, 10);
+  } catch (error) {
+    const err = new Error('Registration failed!');
+    return next(err);
+  }
+
+  // create user
+  const createdUser = new User({
+    fName,
+    lName,
+    email,
+    password: hashedPassword,
+  });
+
+  // saving user data in the database
+  try {
+    await createdUser.save();
+  } catch (error) {
+    const err = new Error('Registration failed!');
+    return next(err);
+  }
+
+  // creating token
+  let token;
+  try {
+    token = jwt.sign(
+      // @ts-ignore
+      { userId: createdUser._id, email: createdUser.email },
+      'jwt_super_secret_key',
+      { expiresIn: '3h' }
+    );
+  } catch (error) {
+    const err = new Error(error.message);
+    return next(err);
+  }
+
+  res.status(200).json({
+    token,
+    userId: createdUser._id,
+    // @ts-ignore
+    email: createdUser.email,
+  });
+};
+
+/**
+ * Login an user
+ * @function loginUser
+ * @param {*} req - Incoming requests
+ * @param {*} res - Outgoing responses
+ * @param {*} next - Go to the next line
+ */
+const loginUser = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.json({ errors: errors.array() });
+  }
+
+  // check for existing user
+  let existingUser;
+  try {
+    existingUser = await User.findOne({ email });
+  } catch (error) {
+    const err = new Error(error.message);
+    return next(err);
+  }
+
+  // if no existing user
+  if (!existingUser) {
+    const error = new Error('Email not found!');
+    return next(error);
+  }
+
+  // if existing user check for password
+  let validPassword = false;
+  try {
+    // @ts-ignore
+    validPassword = await bcrypt.compare(password, existingUser.password);
+  } catch (error) {
+    const err = new Error(error.message);
+    return next(err);
+  }
+
+  // if password is incorrect
+  if (!validPassword) {
+    const error = new Error('Password is incorrect!');
+    return next(error);
+  }
+
+  // creating a jwt
+  let token;
+  try {
+    token = jwt.sign(
+      // @ts-ignore
+      { userId: existingUser._id, email: existingUser.email },
+      'jwt_super_secret_key',
+      { expiresIn: '3h' }
+    );
+  } catch (error) {
+    const err = new Error(error.message);
+    return next(err);
+  }
+
+  // if password is correct
+  res
+    .status(200)
+    // @ts-ignore
+    .json({ userId: existingUser._id, token, email: existingUser.email });
+};
+
+// export
+exports.registerUser = registerUser;
+exports.loginUser = loginUser;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ordersController.html">ordersController</a></li><li><a href="module-ordersModel.html">ordersModel</a></li><li><a href="module-ordersRoute.html">ordersRoute</a></li><li><a href="module-productsController.html">productsController</a></li><li><a href="module-productsModel.html">productsModel</a></li><li><a href="module-productsRoute.html">productsRoute</a></li><li><a href="module-ratingReviewsController.html">ratingReviewsController</a></li><li><a href="module-ratingReviewsModel.html">ratingReviewsModel</a></li><li><a href="module-ratingReviewsRoute.html">ratingReviewsRoute</a></li><li><a href="module-usersController.html">usersController</a></li><li><a href="module-usersModel.html">usersModel</a></li><li><a href="module-usersRoute.html">usersRoute</a></li></ul><h3>Classes</h3><ul><li><a href="module-ordersModel-orderSchema.html">orderSchema</a></li><li><a href="module-productsModel-productSchema.html">productSchema</a></li><li><a href="module-ratingReviewsModel-ratingReviewsModel.html">ratingReviewsModel</a></li><li><a href="module-usersModel-userSchema.html">userSchema</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.5</a> on Thu Sep 24 2020 19:48:06 GMT+0600 (Bangladesh Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
