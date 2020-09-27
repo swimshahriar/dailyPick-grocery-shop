@@ -7,6 +7,12 @@
 <br>
 🔥 Live (Documentation site): [https://dailypick-doc.netlify.app/](https://dailypick-doc.netlify.app/)
 
+### Admin 👨🏻‍💼
+
+URL: [https://dailypick.netlify.app/admin](https://dailypick.netlify.app/admin) <br/>
+Email: admin@dailypick.com <br/>
+Password: 123456
+
 ### Getting Started 👨‍💻
 
 #### 1. Download or Cloning ⬇️
@@ -36,3 +42,5 @@ For generating source code documentation, go to the **server** folder and execut
 In the `./server/index.js` file, `MONGO_URL` is an environment variable. So, you need to add your MongoDB connection URL. <br/>
 
 **Note: Without environment variable, the server will not start**
+
+<span style="color: #008D70">**This is a project for Academic Course CSE327 - Software Engineering. Check out [GitHub Wiki](https://github.com/swimshahriar/dailyPick-grocery-shop/wiki) to find out more.**</span>
