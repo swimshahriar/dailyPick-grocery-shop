@@ -82,7 +82,7 @@ const DrawerItems = () => {
       <Divider />
       <List>
         {otherDirectiory.map((item) => (
-          <Link to={`/category/${item.name}`} key={item.name}>
+          <Link to={'/'} key={item.name}>
             <ListItem button key={item.name}>
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.name} />
@@ -97,11 +97,7 @@ const DrawerItems = () => {
           <Link to={`/category/${item.name}`} key={item.name}>
             <ListItem button key={item.name}>
               <ListItemIcon>
-                <img
-                  className={classes.img}
-                  src={item.icon}
-                  alt="Apple Fruit"
-                />
+                <img className={classes.img} src={item.icon} alt={item.name} />
               </ListItemIcon>
               <ListItemText primary={item.name} />
               <NavigateNext />

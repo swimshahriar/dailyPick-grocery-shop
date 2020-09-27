@@ -3,9 +3,11 @@
 <a href="https://ibb.co/rbPTsPJ"><img src="https://i.ibb.co/1sVh6Vx/daily-Pick-mockup.png" alt="daily-Pick-mockup" border="0" /></a>
 <br/>
 
-🔥 Live (Website): [https://dailypick.netlify.app/](https://dailypick.netlify.app/)
+### Live 🔥
+
+Website: [https://dailypick.netlify.app/](https://dailypick.netlify.app/)
 <br>
-🔥 Live (Documentation site): [https://dailypick-doc.netlify.app/](https://dailypick-doc.netlify.app/)
+Documentation site: [https://dailypick-doc.netlify.app/](https://dailypick-doc.netlify.app/)
 
 ### Admin 👨🏻‍💼
 
