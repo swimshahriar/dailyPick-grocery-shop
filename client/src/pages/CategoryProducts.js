@@ -21,6 +21,7 @@ import Header from '../components/Header/Header';
 import ProductsListContainer from '../components/Products/ProductsListContainer';
 import { useHttpClient } from '../hooks/useHttpClient';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
+import BackdropLoader from '../components/BackdropLoader/BackdropLoader';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -62,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CategoryProducts = () => {
-  const { sendRequest } = useHttpClient();
+  const { sendRequest, isLoading } = useHttpClient();
   const [loadedProducts, setLoadedProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(12);
@@ -73,7 +74,7 @@ const CategoryProducts = () => {
   const { cname } = useParams();
   const history = useHistory();
 
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState(cname);
   const [searchText, setSearchText] = useState('');
 
   // category change handler
@@ -82,7 +83,9 @@ const CategoryProducts = () => {
   };
 
   // setting category
-  useEffect(() => setCategory(cname), [cname]);
+  useEffect(() => {
+    setCategory(cname);
+  }, [cname]);
 
   // search handler
   const searchHandler = async () => {
@@ -114,10 +117,6 @@ const CategoryProducts = () => {
           responseData = await sendRequest(
             `https://dailypick.herokuapp.com/api/product/category/${category}`
           );
-        } else {
-          responseData = await sendRequest(
-            'https://dailypick.herokuapp.com/api/product/'
-          );
         }
 
         setLoadedProducts(responseData);
@@ -128,17 +127,18 @@ const CategoryProducts = () => {
   }, [sendRequest, category, cname]);
 
   // Pagination helper
-  const indexOfLastPost = currentPage * productsPerPage;
-  const indexOfFirstPage = indexOfLastPost - productsPerPage;
-  const currentProducts = loadedProducts.slice(
-    indexOfFirstPage,
-    indexOfLastPost
-  );
+  let currentProducts;
+  if (loadedProducts) {
+    const indexOfLastPost = currentPage * productsPerPage;
+    const indexOfFirstPage = indexOfLastPost - productsPerPage;
+    currentProducts = loadedProducts.slice(indexOfFirstPage, indexOfLastPost);
+  }
 
   return (
     <>
       <Header />
       <main>
+        <BackdropLoader isLoading={isLoading} />
         <div className={classes.filterArea}>
           <Typography variant="h4" color="textPrimary">
             Filter
