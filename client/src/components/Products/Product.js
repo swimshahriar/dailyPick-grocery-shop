@@ -24,7 +24,7 @@ const Product = ({ product }) => {
   const [open, setOpen] = useState(false);
   const [ratingPoint, setRatingPoint] = useState(Number);
 
-  const { sendRequest } = useHttpClient();
+  const { sendRequest, isLoading } = useHttpClient();
 
   useEffect(() => {
     const sendReq = async () => {
@@ -43,91 +43,97 @@ const Product = ({ product }) => {
   }, [sendRequest, product._id]);
 
   return (
-    <Grow in timeout={500}>
-      <>
-        {open && (
-          <SimpleDialogDemo open={open} setOpen={setOpen} product={product} />
-        )}
-        <Grid item xs={12} sm={6} md={4} lg={3}>
-          <Card className={classes.card}>
-            <div className={classes.cardImageContainer}>
-              <CardMedia
-                className={classes.cardImage}
-                image={product.imageUrl}
-                title="Lime"
-              />
-            </div>
-            <CardContent>
-              <div className={classes.rating}>
-                <Rating
-                  readOnly
-                  precision={0.5}
-                  size="medium"
-                  name="half-rating-read"
-                  value={ratingPoint}
+    <>
+      {open && !isLoading && (
+        <SimpleDialogDemo open={open} setOpen={setOpen} product={product} />
+      )}
+      {!isLoading && (
+        <Grow in timeout={500}>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Card className={classes.card}>
+              <div className={classes.cardImageContainer}>
+                <CardMedia
+                  className={classes.cardImage}
+                  image={product.imageUrl}
+                  title="Lime"
                 />
-                <Typography
-                  className={classes.ratingBtn}
-                  variant="h6"
-                  color="textSecondary"
-                  onClick={() => setOpen(true)}
-                >
-                  ({ratingPoint} / 5)
-                </Typography>
               </div>
-              <div className={classes.cardContent}>
-                <Typography variant="h6">{product.title}</Typography>
-                <div className={classes.priceSection}>
+              <CardContent>
+                <div className={classes.rating}>
+                  <Rating
+                    readOnly
+                    precision={0.5}
+                    size="medium"
+                    name="half-rating-read"
+                    value={ratingPoint}
+                  />
                   <Typography
+                    className={classes.ratingBtn}
                     variant="h6"
-                    color="primary"
-                    className={classNames(
-                      classes.prodPrice,
-                      product.offerPrice && classes.offer
-                    )}
+                    color="textSecondary"
+                    onClick={() => setOpen(true)}
                   >
-                    ${product.price}
+                    ({ratingPoint} / 5)
                   </Typography>
-                  {product.offerPrice > 0 && (
+                </div>
+                <div className={classes.cardContent}>
+                  <Typography variant="h6">{product.title}</Typography>
+                  <div className={classes.priceSection}>
                     <Typography
                       variant="h6"
                       color="primary"
-                      className={classes.prodPrice}
+                      className={classNames(
+                        classes.prodPrice,
+                        product.offerPrice && classes.offer
+                      )}
                     >
-                      ${product.offerPrice}
+                      ${product.price}
                     </Typography>
-                  )}
+                    {product.offerPrice > 0 && (
+                      <Typography
+                        variant="h6"
+                        color="primary"
+                        className={classes.prodPrice}
+                      >
+                        ${product.offerPrice}
+                      </Typography>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <Typography
-                component="p"
-                color="textSecondary"
-                className={classes.qty}
-              >
-                {product.unitQty}
-              </Typography>
-              <Typography component="p" color="primary" className={classes.qty}>
-                {product.category}
-              </Typography>
-              <Typography variant="body1" color="textSecondary">
-                {product.description}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button
-                startIcon={<ShoppingBasketOutlined />}
-                variant="outlined"
-                color="primary"
-                fullWidth
-                onClick={() => shopContext.addItemToCart(product)}
-              >
-                Add To Cart
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-      </>
-    </Grow>
+                <Typography
+                  component="p"
+                  color="textSecondary"
+                  className={classes.qty}
+                >
+                  {product.unitQty}
+                </Typography>
+                <Typography
+                  component="p"
+                  color="primary"
+                  className={classes.qty}
+                >
+                  {product.category}
+                </Typography>
+                <Typography variant="body1" color="textSecondary">
+                  {product.description}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button
+                  startIcon={<ShoppingBasketOutlined />}
+                  variant="outlined"
+                  color="primary"
+                  fullWidth
+                  onClick={() => shopContext.addItemToCart(product)}
+                >
+                  Add To Cart
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        </Grow>
+      )}
+    </>
   );
 };
 

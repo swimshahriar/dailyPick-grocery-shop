@@ -89,16 +89,11 @@ const CategoryProducts = () => {
 
   // search handler
   const searchHandler = async () => {
-    let cname = 'all';
-    if (category !== '') {
-      cname = category;
-    }
-
     let responseData;
     if (searchText !== '') {
       try {
         responseData = await fetch(
-          `https://dailypick.herokuapp.com/api/product/search/${cname}/q=${searchText}`
+          `https://dailypick.herokuapp.com/api/product/search/${category}/q=${searchText}`
         );
       } catch (error) {
         throw Error(error.message);
@@ -193,7 +188,7 @@ const CategoryProducts = () => {
             </Container>
           </Grow>
         )}
-        {loadedProducts.length > 0 && (
+        {loadedProducts.length > 0 && !isLoading && (
           <>
             <ProductsListContainer products={currentProducts} />
             <PaginationComponent

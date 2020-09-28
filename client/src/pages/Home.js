@@ -8,6 +8,7 @@ import Carousel from '../components/Carousel/Carousel';
 import ProductsListContainer from '../components/Products/ProductsListContainer';
 import { useHttpClient } from '../hooks/useHttpClient';
 import PaginationComponent from '../components/Pagination/PaginationComponent';
+import BackdropLoader from '../components/BackdropLoader/BackdropLoader';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Home = () => {
-  const { sendRequest } = useHttpClient();
+  const { sendRequest, isLoading } = useHttpClient();
   const [loadedProducts, setLoadedProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(8);
@@ -56,6 +57,7 @@ const Home = () => {
     <>
       <Header />
       <main>
+        <BackdropLoader isLoading={isLoading} />
         <Carousel />
         <Container className={classes.offerTitle}>
           <LocalOfferOutlined fontSize="large" />

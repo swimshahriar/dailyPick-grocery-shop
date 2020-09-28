@@ -68,7 +68,7 @@ const AuthForm = () => {
       } catch (error) {}
     }
 
-    if (!error) {
+    if (error !== null) {
       // resetting states
       setFName('');
       setLName('');
